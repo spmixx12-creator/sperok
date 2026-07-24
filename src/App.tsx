@@ -3,6 +3,7 @@ import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
 import { Sticker, ChatMessage } from './types';
 import ProjectsPage from './components/ProjectsPage';
 import AboutPage from './components/AboutPage';
+import ShowcasePage from './components/ShowcasePage';
 import { BlurFade } from './components/ui/blur-fade';
 import { MagicText } from './components/ui/magic-text';
 import { VideoScrollHero } from './components/ui/video-scroll-hero';
@@ -520,31 +521,23 @@ function HomePage({ onOpenProjects }: HomePageProps) {
       <FloatingActionMenu
         position={atLastSection ? 'top' : 'bottom'}
         options={[
-          // Sections de la page d'accueil, dans l'ordre de défilement.
           {
-            label: 'Accueil',
+            label: 'Home',
             Icon: <Home className="h-4 w-4" />,
             onClick: () => handleScrollToSection('hero'),
           },
           {
-            label: 'Aperçus',
-            Icon: <LayoutGrid className="h-4 w-4" />,
-            onClick: () => handleScrollToSection('apercus'),
+            label: 'À propos',
+            Icon: <User className="h-4 w-4" />,
+            onClick: () => {
+              window.location.hash = '#/a-propos';
+            },
           },
           {
             label: 'Contact',
             Icon: <Mail className="h-4 w-4" />,
             onClick: () => handleScrollToSection('contact'),
           },
-          // Bouton « haut de page » : icône seule, visible seulement hors du sommet.
-          ...(showScrollTop
-            ? [
-                {
-                  Icon: <ArrowUp className="h-4 w-4" />,
-                  onClick: () => window.scrollTo({ top: 0, behavior: 'smooth' }),
-                },
-              ]
-            : []),
         ]}
       />
 
@@ -863,6 +856,8 @@ function HomePage({ onOpenProjects }: HomePageProps) {
 const PROJECTS_HASH = '#/projets';
 const ABOUT_HASH_EN = '#/about';
 const ABOUT_HASH_FR = '#/a-propos';
+const WEBDESIGN_HASH = '#/web-design';
+const MONTAGE_HASH = '#/montage-video';
 
 export default function App() {
   const [route, setRoute] = useState(() => window.location.hash);
@@ -875,6 +870,17 @@ export default function App() {
 
   if (route === ABOUT_HASH_EN || route === ABOUT_HASH_FR) {
     return <AboutPage onBack={() => { window.location.hash = ''; }} />;
+  }
+
+  if (route === WEBDESIGN_HASH || route === MONTAGE_HASH) {
+    return (
+      <ShowcasePage
+        kind={route === MONTAGE_HASH ? 'montage-video' : 'web-design'}
+        onBack={() => {
+          window.location.hash = PROJECTS_HASH;
+        }}
+      />
+    );
   }
 
   if (route === PROJECTS_HASH) {

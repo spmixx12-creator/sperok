@@ -88,30 +88,24 @@ function Dock({
   panelHeight = DEFAULT_PANEL_HEIGHT,
 }: DockProps) {
   const mouseX = useMotionValue(Infinity);
-  const isHovered = useMotionValue(0);
 
+  // Hauteur CONSTANTE réservée (assez pour l'agrandissement + les libellés) :
+  // le survol grandit les icônes SANS changer la place occupée → aucun décalage
+  // de la mise en page (l'espace autour du dock reste identique).
   const maxHeight = useMemo(() => {
     return Math.max(DOCK_HEIGHT, magnification + magnification / 2 + 4);
   }, [magnification]);
 
-  const heightRow = useTransform(isHovered, [0, 1], [panelHeight, maxHeight]);
-  const height = useSpring(heightRow, spring);
-
   return (
-    <motion.div
-      style={{
-        height: height,
-        scrollbarWidth: 'none',
-      }}
-      className='mx-2 flex max-w-full items-end overflow-x-auto'
+    <div
+      style={{ height: maxHeight, scrollbarWidth: 'none' }}
+      className='mx-2 flex max-w-full items-end justify-center'
     >
       <motion.div
         onMouseMove={({ pageX }) => {
-          isHovered.set(1);
           mouseX.set(pageX);
         }}
         onMouseLeave={() => {
-          isHovered.set(0);
           mouseX.set(Infinity);
         }}
         className={cx(
@@ -127,7 +121,7 @@ function Dock({
           {children}
         </DockProvider>
       </motion.div>
-    </motion.div>
+    </div>
   );
 }
 

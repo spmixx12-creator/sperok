@@ -416,7 +416,7 @@ export default function ProjectsPage({ onBack }: ProjectsPageProps) {
         <h2 className="mt-4 mb-16 font-display text-3xl font-black tracking-tight text-white md:text-5xl">
           Ce que{' '}
           <span
-            className="inline-block translate-y-[0.12em] font-normal text-amber-400"
+            className="inline-block -translate-y-[0.1em] text-[1.25em] font-normal leading-none text-amber-400"
             style={{ fontFamily: 'Identic Partner Script, cursive' }}
           >
             je fais.
@@ -443,23 +443,14 @@ export default function ProjectsPage({ onBack }: ProjectsPageProps) {
           })}
         </Dock>
 
-        <span className="mt-16 font-mono text-[10px] uppercase tracking-widest text-white/40">
-          Clique sur une catégorie pour explorer les projets
-        </span>
-      </section>
-
-      {/* ============================================================= */}
-      {/* SOUS LE HUB : Web design & Montage vidéo mis en avant dans une  */}
-      {/* phrase, via les boutons animés (ripple). Clic → visionneuse.    */}
-      {/* z-[10000] > noise-overlay (sans grain), cohérent avec le hub.   */}
-      {/* ============================================================= */}
-      <section className="relative z-[10000] flex min-h-[70vh] w-full items-center justify-center overflow-hidden bg-black px-6 py-24">
-        <p className="max-w-3xl text-center font-display text-2xl font-semibold leading-relaxed text-white md:text-4xl md:leading-[1.5]">
+        {/* Web design & Montage vidéo mis en avant, sur le même écran, juste
+            sous le dock (boutons animés → ouvrent la visionneuse). */}
+        <p className="mt-12 max-w-2xl text-center font-display text-base font-medium leading-relaxed text-white/90 md:text-lg">
           En dehors de tout ça, je me débrouille aussi en{' '}
           <Button
             variant="default"
             icon={<Monitor />}
-            onClick={() => setActiveCategory('Web design')}
+            onClick={() => { window.location.hash = '#/web-design'; }}
             className="align-middle"
           >
             Web design
@@ -468,7 +459,7 @@ export default function ProjectsPage({ onBack }: ProjectsPageProps) {
           <Button
             variant="default"
             icon={<Film />}
-            onClick={() => setActiveCategory('Montage vidéo')}
+            onClick={() => { window.location.hash = '#/montage-video'; }}
             className="align-middle"
           >
             Montage vidéo
@@ -527,15 +518,15 @@ export default function ProjectsPage({ onBack }: ProjectsPageProps) {
                   <button
                     onClick={() => nextCategory && setActiveCategory(nextCategory)}
                     title={`Suivant : ${nextCategory}`}
-                    className="group flex cursor-pointer items-center gap-3 rounded-full border border-neutral-200 bg-white/85 py-2.5 pl-2.5 pr-5 shadow-xl backdrop-blur-md transition-transform hover:-translate-y-0.5"
+                    className="group flex cursor-pointer items-center gap-2 rounded-full border border-neutral-200 bg-white/85 py-1.5 pl-1.5 pr-3.5 shadow-xl backdrop-blur-md transition-transform hover:-translate-y-0.5 md:gap-3 md:py-2.5 md:pl-2.5 md:pr-5"
                   >
-                    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-400">
-                      <ActiveIcon className="h-5 w-5 text-neutral-900" />
+                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-amber-400 md:h-10 md:w-10">
+                      <ActiveIcon className="h-4 w-4 text-neutral-900 md:h-5 md:w-5" />
                     </span>
-                    <span className="font-display text-sm font-bold uppercase tracking-wide text-neutral-900">
+                    <span className="font-display text-xs font-bold uppercase tracking-wide text-neutral-900 md:text-sm">
                       {activeCategory}
                     </span>
-                    <ChevronRight className="h-4 w-4 text-neutral-400 transition-transform group-hover:translate-x-0.5" />
+                    <ChevronRight className="h-3.5 w-3.5 text-neutral-400 transition-transform group-hover:translate-x-0.5 md:h-4 md:w-4" />
                   </button>
                 )}
               </motion.div>
