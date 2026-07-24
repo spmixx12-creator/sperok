@@ -68,24 +68,27 @@ const BASE_CONFIG: GlobeOptions = {
   baseColor: [1, 1, 1],
   markerColor: AMBER,
   glowColor: [1, 1, 1],
-  markers: [
-    { location: [6.3703, 2.3912], size: 0.12 }, // Cotonou, Bénin (mis en avant)
-    { location: [48.8566, 2.3522], size: 0.05 }, // Paris
-    { location: [40.7128, -74.006], size: 0.05 }, // New York
-    { location: [-33.8688, 151.2093], size: 0.05 }, // Sydney
-    { location: [35.6762, 139.6503], size: 0.05 }, // Tokyo
-  ],
+  markers: [], // pas de points/marqueurs — uniquement la sphère
 };
+
+type GlobePalette = Partial<
+  Pick<
+    COBEOptions,
+    "dark" | "baseColor" | "glowColor" | "markerColor" | "mapBrightness" | "diffuse"
+  >
+>;
 
 export function Globe({
   className,
   config,
+  palette,
 }: {
   className?: string;
   config?: COBEOptions;
+  palette?: GlobePalette;
 }) {
   let phi = 0;
-  let width = 0;
+  const widthRef = useRef(0);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const pointerInteracting = useRef<number | null>(null);
   const pointerInteractionMovement = useRef(0);
@@ -95,8 +98,11 @@ export function Globe({
 
   // Config = base + couleurs de l'heure au Bénin (recalculée au montage).
   const resolvedConfig = useMemo<GlobeOptions>(
-    () => (config ? config : { ...BASE_CONFIG, ...beninPalette() }),
-    [config],
+    () =>
+      config
+        ? config
+        : { ...BASE_CONFIG, ...beninPalette(), ...(palette ?? {}) },
+    [config, palette],
   );
 
   const updatePointerInteraction = (value: number | null) => {
@@ -115,33 +121,55 @@ export function Globe({
   };
 
   useEffect(() => {
-    const onResize = () => {
-      if (canvasRef.current) width = canvasRef.current.offsetWidth;
-    };
-    window.addEventListener("resize", onResize);
-    onResize();
+    const canvas = canvasRef.current;
+    if (!canvas) return;
 
-    const opts: GlobeOptions = {
-      ...resolvedConfig,
-      width: width * 2,
-      height: width * 2,
-      onRender: (state) => {
-        if (!pointerInteracting.current) phi += 0.005;
-        state.phi = phi + rs.get();
-        state.width = width * 2;
-        state.height = width * 2;
-      },
+    const measure = () => {
+      widthRef.current = canvas.offsetWidth;
     };
-    const globe = createGlobe(canvasRef.current!, opts);
+    measure();
 
-    const t = setTimeout(() => {
-      if (canvasRef.current) canvasRef.current.style.opacity = "1";
-    });
+    // Suit les changements de taille du canvas (fiable, contrairement au seul
+    // event window 'resize').
+    const ro = new ResizeObserver(measure);
+    ro.observe(canvas);
+
+    let globe: ReturnType<typeof createGlobe> | null = null;
+    let raf = 0;
+    let cancelled = false;
+
+    // Attendre que la largeur soit connue (> 0) avant de créer le globe :
+    // sinon il est créé à 0px et reste invisible (seuls les marqueurs).
+    const start = () => {
+      if (cancelled) return;
+      measure();
+      if (widthRef.current === 0) {
+        raf = requestAnimationFrame(start);
+        return;
+      }
+      const opts: GlobeOptions = {
+        ...resolvedConfig,
+        width: widthRef.current * 2,
+        height: widthRef.current * 2,
+        onRender: (state) => {
+          if (!pointerInteracting.current) phi += 0.005;
+          state.phi = phi + rs.get();
+          state.width = widthRef.current * 2;
+          state.height = widthRef.current * 2;
+        },
+      };
+      globe = createGlobe(canvas, opts);
+      requestAnimationFrame(() => {
+        canvas.style.opacity = "1";
+      });
+    };
+    start();
 
     return () => {
-      clearTimeout(t);
-      globe.destroy();
-      window.removeEventListener("resize", onResize);
+      cancelled = true;
+      cancelAnimationFrame(raf);
+      globe?.destroy();
+      ro.disconnect();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rs, resolvedConfig]);
