@@ -5,6 +5,7 @@ import { ContainerScroll } from './ui/container-scroll-animation';
 import { Dock, DockItem, DockIcon, DockLabel } from './ui/dock';
 import { InfiniteMasonry } from './ui/infinite-masonry';
 import { Button } from './ui/new-button';
+import { BellNotify } from './ui/bell-notify';
 import { Component as Footer } from './ui/footer-taped-design';
 import { MarqueeAnimation } from './ui/marquee-effect';
 import FloatingActionMenu from './ui/floating-action-menu';
@@ -369,8 +370,26 @@ export default function ProjectsPage({ onBack }: ProjectsPageProps) {
       {/* ============================================================= */}
       <section
         id="hub"
-        className="relative z-[10000] flex h-screen w-full flex-col items-center justify-start overflow-hidden bg-black px-6 pt-44 text-center md:justify-center md:pt-0"
+        className="relative z-[10000] flex h-screen w-full flex-col items-center justify-center overflow-hidden bg-black px-6 pt-44 text-center md:pt-0"
       >
+        {/* Cloche « À propos de moi » suspendue au dock : sa PROPRE corde relie
+            le dock à la lanterne, DERRIÈRE le texte (z-[-1]) — le paragraphe la
+            recouvre. Le bouton apparaît en bas, sous le paragraphe. Taille
+            inchangée. */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 top-[40%] z-[-1] flex justify-center">
+          <div className="pointer-events-auto h-full w-full max-w-sm">
+            <BellNotify
+              size={220}
+              isOn
+              disableToggle
+              buttonLabel="À propos de moi"
+              onButtonClick={() => {
+                window.location.hash = '#/a-propos';
+              }}
+            />
+          </div>
+        </div>
+
         {/* CLIENTS : superposés sur le haut de cette section (overlay). */}
         <div className="absolute inset-x-0 top-0 z-20 flex flex-col gap-3 pt-8">
           <div className="px-6 text-center">

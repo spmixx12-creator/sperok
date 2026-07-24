@@ -42,7 +42,7 @@ function Model({ progress }: { progress: MotionValue<number> }) {
       if (!outer.current) return;
       const small = window.innerWidth < 1024;
       outer.current.scale.setScalar((small ? 11 : 13) / maxAxis);
-      outer.current.position.set(0, small ? -1.6 : -3, 0);
+      outer.current.position.set(0, small ? -1.0 : -3, 0);
     };
     apply();
     window.addEventListener("resize", apply);

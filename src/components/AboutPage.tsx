@@ -427,7 +427,7 @@ export default function AboutPage({ onBack }: AboutPageProps) {
       });
 
       // 5. Scrollspy global de section pour le menu
-      const trackSections = ['intro', 'timeline', 'projects'];
+      const trackSections = ['intro', 'timeline'];
       trackSections.forEach((section) => {
         ScrollTrigger.create({
           trigger: `#about-${section}`,
@@ -455,7 +455,7 @@ export default function AboutPage({ onBack }: AboutPageProps) {
   };
 
   return (
-    <div ref={containerRef} className="relative min-h-screen bg-[#F8F5F0] text-[#191514] font-sans selection:bg-[#F5B419] selection:text-[#191514] overflow-x-hidden">
+    <div ref={containerRef} className="relative min-h-screen bg-[#F8F5F0] text-[#191514] font-sans selection:bg-[#F5B419] selection:text-[#191514] overflow-x-clip">
       {/* Logo adaptatif persistant global (seul élément visible en haut) */}
       <Logo />
 
@@ -563,21 +563,7 @@ export default function AboutPage({ onBack }: AboutPageProps) {
           ref={sidebarRef}
           className="hidden lg:block w-80 lg:w-[22rem] shrink-0 border-r border-neutral-200 sticky top-0 h-screen p-8 bg-[#F8F5F0] z-40 flex flex-col justify-between overflow-y-auto"
         >
-          {/* Logo / Monogramme */}
           <div>
-            <div className="flex items-center gap-4">
-              <div 
-                onClick={onBack}
-                className="w-12 h-12 bg-[#F5B419] flex items-center justify-center font-display font-black text-xl text-[#191514] cursor-pointer hover:scale-105 transition-transform"
-              >
-                SK
-              </div>
-              <div>
-                <h4 className="font-display font-bold text-xs uppercase tracking-wider text-[#191514]">Spéro KOUTON</h4>
-                <p className="font-mono text-[9px] text-neutral-400 uppercase tracking-widest">DESIGNER CRÉATIF</p>
-              </div>
-            </div>
-
             {/* Paragraphe de positionnement */}
             <p className="mt-8 text-xs text-neutral-600 leading-relaxed">
               Designer autodidacte basé au Bénin. J'applique le design différemment pour concevoir des identités visuelles vivantes et des produits soignés.
@@ -609,17 +595,11 @@ export default function AboutPage({ onBack }: AboutPageProps) {
               >
                 À propos
               </button>
-              <button 
-                onClick={() => handleScrollToId('about-timeline')} 
+              <button
+                onClick={() => handleScrollToId('about-timeline')}
                 className={`flex items-center justify-between px-3 py-2 text-left transition-colors cursor-pointer ${activeSection === 'timeline' ? 'bg-[#F5B419] text-[#191514]' : 'hover:bg-neutral-100'}`}
               >
                 Mon parcours
-              </button>
-              <button 
-                onClick={() => handleScrollToId('about-projects')} 
-                className={`flex items-center justify-between px-3 py-2 text-left transition-colors cursor-pointer ${activeSection === 'projects' ? 'bg-[#F5B419] text-[#191514]' : 'hover:bg-neutral-100'}`}
-              >
-                Projets
               </button>
             </nav>
 
@@ -824,85 +804,6 @@ export default function AboutPage({ onBack }: AboutPageProps) {
             </div>
           </div>
 
-          {/* ========================================== */}
-          {/* 6. SECTION PROJETS (APERÇU)                 */}
-          {/* ========================================== */}
-          <section 
-            id="about-projects" 
-            className="px-6 md:px-12 py-24 bg-[#191514] border-t border-neutral-800 text-white select-none overflow-hidden mt-12"
-          >
-            <div className="max-w-5xl mx-auto">
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-16">
-                <div>
-                  <span className="inline-block font-mono text-[9px] uppercase tracking-widest text-[#F5B419] font-bold border border-[#F5B419]/35 px-2.5 py-1 rounded mb-4">
-                    PROJETS SÉLECTIONNÉS
-                  </span>
-                  <h2 className="font-display font-black text-4xl md:text-6xl uppercase tracking-tight text-white leading-[0.95] text-left">
-                    Pensés avec soin, <br />
-                    conçus pour durer.
-                  </h2>
-                </div>
-                <p className="max-w-xs text-neutral-400 text-xs md:text-sm leading-relaxed text-left">
-                  Une sélection de mes travaux récents, combinant direction artistique, branding et expériences digitales soignées.
-                </p>
-              </div>
-
-              {/* Cartes projets disposées horizontalement */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {PROJECTS_PREVIEW.map((project) => (
-                  <motion.div 
-                    key={project.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6 }}
-                    className="group relative h-[360px] md:h-[400px] border border-neutral-800 rounded-2xl overflow-hidden cursor-pointer flex flex-col justify-end p-6"
-                  >
-                    <div className="absolute inset-0 z-0">
-                      <img 
-                        src={project.image} 
-                        alt={project.title} 
-                        className="w-full h-full object-cover object-center filter brightness-[0.4] group-hover:scale-105 duration-700 transition-transform"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent z-1" />
-                    </div>
-
-                    <div className="relative z-10 text-left space-y-4">
-                      <div className="flex items-center justify-between">
-                        <span className="font-display font-black text-[#F5B419] text-sm">{project.id}</span>
-                        <div className="flex gap-1.5 flex-wrap">
-                          {project.tags.map((tag) => (
-                            <span 
-                              key={tag} 
-                              className="font-mono text-[8px] tracking-wider uppercase bg-white/10 text-white px-2 py-0.5 rounded-full border border-white/5"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div>
-                        <h3 className="font-display font-black text-2xl uppercase tracking-tight text-white group-hover:text-[#F5B419] transition-colors">
-                          {project.title}
-                        </h3>
-                        <p className="text-neutral-400 text-xs mt-1.5 leading-relaxed">
-                          {project.description}
-                        </p>
-                      </div>
-
-                      <div className="flex justify-between items-center border-t border-neutral-800/80 pt-4">
-                        <span className="font-mono text-[9px] tracking-widest text-[#F5B419] uppercase">VOIR LE PROJET</span>
-                        <div className="w-8 h-8 rounded-full bg-white/10 group-hover:bg-[#F5B419] group-hover:text-[#191514] flex items-center justify-center text-white transition-all">
-                          <ArrowRight className="w-4 h-4 transform group-hover:translate-x-0.5 transition-transform" />
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </section>
 
           {/* ========================================== */}
           {/* BOUTON RETOUR MOBILES                       */}

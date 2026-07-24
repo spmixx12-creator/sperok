@@ -4,6 +4,7 @@ import { Sticker, ChatMessage } from './types';
 import ProjectsPage from './components/ProjectsPage';
 import AboutPage from './components/AboutPage';
 import ShowcasePage from './components/ShowcasePage';
+import ContactPage from './components/ContactPage';
 import { BlurFade } from './components/ui/blur-fade';
 import { MagicText } from './components/ui/magic-text';
 import { VideoScrollHero } from './components/ui/video-scroll-hero';
@@ -858,6 +859,7 @@ const ABOUT_HASH_EN = '#/about';
 const ABOUT_HASH_FR = '#/a-propos';
 const WEBDESIGN_HASH = '#/web-design';
 const MONTAGE_HASH = '#/montage-video';
+const CONTACT_HASH = '#/contact';
 
 export default function App() {
   const [route, setRoute] = useState(() => window.location.hash);
@@ -870,6 +872,10 @@ export default function App() {
 
   if (route === ABOUT_HASH_EN || route === ABOUT_HASH_FR) {
     return <AboutPage onBack={() => { window.location.hash = ''; }} />;
+  }
+
+  if (route === CONTACT_HASH) {
+    return <ContactPage onBack={() => { window.location.hash = ''; }} />;
   }
 
   if (route === WEBDESIGN_HASH || route === MONTAGE_HASH) {

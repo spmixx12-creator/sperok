@@ -80,10 +80,10 @@ export function Component() {
             </div>
 
             <a
-              href="#contact"
+              href="#/contact"
               className="group inline-flex items-center gap-2.5 self-start rounded-full bg-neutral-900 px-5 py-2.5 font-display text-sm font-semibold text-white transition-colors hover:bg-amber-400 hover:text-neutral-900 md:self-center"
             >
-              <span>Designons ta prochaine identité</span>
+              <span>Désignons ta prochaine identité</span>
               <ArrowUpRight className="h-4 w-4 transition-transform group-hover:rotate-45" />
             </a>
           </div>
