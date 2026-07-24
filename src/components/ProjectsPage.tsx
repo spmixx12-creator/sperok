@@ -1,11 +1,11 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Home, LayoutGrid, ArrowUp, Users, ArrowLeft, Monitor, Sparkles } from 'lucide-react';
+import { Home, LayoutGrid, ArrowUp, Users, ArrowLeft, Monitor, Sparkles, Palette, Share2, Clapperboard, Printer, Film, ChevronRight, X, type LucideIcon } from 'lucide-react';
 import { ContainerScroll } from './ui/container-scroll-animation';
+import { Dock, DockItem, DockIcon, DockLabel } from './ui/dock';
+import { InfiniteMasonry } from './ui/infinite-masonry';
+import { Button } from './ui/new-button';
 import { MarqueeAnimation } from './ui/marquee-effect';
-import { Component as Footer } from './ui/footer-taped-design';
-import { ZoomParallax } from './ui/zoom-parallax';
-import { ProjectsShowcase } from './ui/projects-showcase';
 import FloatingActionMenu from './ui/floating-action-menu';
 import Lenis from 'lenis';
 import logoMask from '../créa/sperok-mask.png';
@@ -15,30 +15,54 @@ interface ProjectsPageProps {
   onBack: () => void;
 }
 
-// Visuels locaux, rangés par sous-dossier de catégorie dans `Apperçu/`
-// (Branding, Social Media, Print Design, Motion Design, Montage Vidéo).
-// On accepte images, GIF et vidéos (mp4) ; la galerie gère les deux.
-const MEDIA = import.meta.glob('../Apperçu/**/*.{png,jpg,jpeg,webp,gif,mp4}', {
+// Domaines d'intervention présentés dans le « hub » (dock façon macOS).
+// Un clic ouvre la visionneuse plein écran de la catégorie.
+// « Tout » = navigation dans l'ensemble des réalisations.
+const DOCK = [
+  { label: 'Tout', icon: LayoutGrid },
+  { label: 'Branding', icon: Palette },
+  { label: 'Social media', icon: Share2 },
+  { label: 'Motion design', icon: Clapperboard },
+  { label: 'Print design', icon: Printer },
+] as const;
+
+// Tous les visuels (images uniquement — le canvas ne dessine pas les mp4 ; les
+// mp4 « Montage Vidéo » sont représentés par des posters `poster-*.jpg`).
+const IMG = import.meta.glob('../Apperçu/**/*.{png,jpg,jpeg,webp,gif}', {
   eager: true,
   import: 'default',
-});
+}) as Record<string, string>;
 
-// Tous les médias d'une catégorie (= nom du sous-dossier), triés par nom.
-const mediaFor = (category: string) =>
-  Object.keys(MEDIA)
-    .filter((key) => key.includes(`/Apperçu/${category}/`))
+// Images à la racine d'Apperçu/ = domaine « Web design ».
+const rootImages = Object.keys(IMG)
+  .filter((k) => /\/Apperçu\/[^/]+$/.test(k))
+  .sort()
+  .map((k) => IMG[k]);
+
+// Images d'un sous-dossier de catégorie.
+const folderImages = (folder: string) =>
+  Object.keys(IMG)
+    .filter((k) => k.includes(`/Apperçu/${folder}/`))
     .sort()
-    .map((key) => ({ src: MEDIA[key] as string, alt: category }));
+    .map((k) => IMG[k]);
 
-// Catégories de design présentées (titre + sous-titre + nombre de visuels).
-// Ajoute autant de visuels que tu veux par catégorie via `count` (ou, plus tard,
-// une liste d'images dédiée) : toutes restent visibles avec le même mouvement.
-const CATEGORIES = [
-  { title: 'Branding', subtitle: 'Identité visuelle & logotypes', count: 9 },
-  { title: 'Social Media', subtitle: 'Contenus & feeds qui captent', count: 12 },
-  { title: 'Print Design', subtitle: 'Affiches, supports & packaging', count: 8 },
-  { title: 'Motion Design', subtitle: 'Visuels animés & génériques', count: 10 },
-  { title: 'Montage Vidéo', subtitle: 'Récits montés image par image', count: 11 },
+// Pool d'images par domaine (clé = libellé du dock).
+const CATEGORY_IMAGES: Record<string, string[]> = {
+  'Web design': rootImages,
+  Branding: folderImages('Branding'),
+  'Social media': folderImages('Social Media'),
+  'Motion design': folderImages('Motion Design'),
+  'Print design': folderImages('Print Design'),
+  'Montage vidéo': folderImages('Montage Vidéo'),
+};
+
+// « Tout » = l'ensemble des réalisations des options actuelles (Web design et
+// Montage vidéo sont réservés pour un autre emplacement).
+CATEGORY_IMAGES['Tout'] = [
+  ...folderImages('Branding'),
+  ...folderImages('Social Media'),
+  ...folderImages('Motion Design'),
+  ...folderImages('Print Design'),
 ];
 
 // Clients accompagnés (défilent en bandeau dans la section CLIENTS).
@@ -91,6 +115,41 @@ export default function ProjectsPage({ onBack }: ProjectsPageProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const mobileVideoRef = useRef<HTMLVideoElement>(null);
 
+  // Domaine ouvert en visionneuse plein écran (null = page normale).
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  // Image agrandie plein écran (null = aucune).
+  const [zoomed, setZoomed] = useState<string | null>(null);
+
+  // Échap ferme d'abord l'image agrandie, sinon la visionneuse.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return;
+      setZoomed((z) => (z ? null : z));
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
+  // Icône de chaque domaine (dock + les deux mis en avant sous le hub).
+  const ICONS: Record<string, LucideIcon> = {
+    Tout: LayoutGrid,
+    Branding: Palette,
+    'Social media': Share2,
+    'Motion design': Clapperboard,
+    'Print design': Printer,
+    'Web design': Monitor,
+    'Montage vidéo': Film,
+  };
+  // Cycle de la barre épurée = uniquement les options du dock. Depuis un domaine
+  // hors dock (Web design / Montage vidéo), « suivant » ramène au cycle (Tout).
+  const cycle = DOCK.map((d) => d.label as string);
+  const ActiveIcon = activeCategory ? ICONS[activeCategory] : null;
+  const nextCategory = activeCategory
+    ? cycle.includes(activeCategory)
+      ? cycle[(cycle.indexOf(activeCategory) + 1) % cycle.length]
+      : 'Tout'
+    : null;
+
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
@@ -114,33 +173,6 @@ export default function ProjectsPage({ onBack }: ProjectsPageProps) {
       mv.muted = true;
       mv.play().catch(() => {});
     }
-  }, []);
-
-  // Image agrandie en plein écran (lightbox).
-  const [zoomed, setZoomed] = useState<{ src: string; alt?: string } | null>(null);
-
-  // Ouvre la vue agrandie et empile une entrée d'historique → le bouton « retour »
-  // du navigateur (ou la touche Échap) referme la vue.
-  const openZoom = (image: { src: string; alt?: string }) => {
-    setZoomed(image);
-    window.history.pushState({ lightbox: true }, '');
-  };
-  const closeZoom = () => {
-    if (window.history.state?.lightbox) window.history.back();
-    else setZoomed(null);
-  };
-
-  useEffect(() => {
-    const onPop = () => setZoomed(null);
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') closeZoom();
-    };
-    window.addEventListener('popstate', onPop);
-    window.addEventListener('keydown', onKey);
-    return () => {
-      window.removeEventListener('popstate', onPop);
-      window.removeEventListener('keydown', onKey);
-    };
   }, []);
 
   return (
@@ -332,139 +364,220 @@ export default function ProjectsPage({ onBack }: ProjectsPageProps) {
         </ContainerScroll>
       </div>
 
-      {/* Web Design / Vibe coding : « Mes sites, en action. »
-          Chaque maquette défile dans sa fenêtre navigateur au fil du scroll. */}
-      <ProjectsShowcase />
+      {/* ============================================================= */}
+      {/* HUB CATÉGORIES : page noire (SANS grain), fenêtre de navigation */}
+      {/* (dock façon macOS) centrée. Chaque icône = une catégorie        */}
+      {/* d'intervention ; le clic amène à la catégorie correspondante.    */}
+      {/* z-[10000] > noise-overlay (z-9999) → aucun grain sur cette page. */}
+      {/* ============================================================= */}
+      <section
+        id="hub"
+        className="relative z-[10000] flex h-screen w-full flex-col items-center justify-center overflow-hidden bg-black px-6 text-center"
+      >
+        {/* CLIENTS : superposés sur le haut de cette section (overlay). */}
+        <div className="absolute inset-x-0 top-0 z-20 flex flex-col gap-3 pt-8">
+          <div className="px-6 text-center">
+            <span className="font-mono text-[9px] uppercase tracking-widest text-amber-400 bg-amber-400/15 px-2.5 py-1 rounded border border-amber-400/30">
+              ILS M'ONT FAIT CONFIANCE // CLIENTS
+            </span>
+          </div>
+          <div className="flex w-full flex-col gap-3">
+            <MarqueeAnimation
+              direction="left"
+              baseVelocity={1.4}
+              className="bg-neutral-900 py-4 font-display text-4xl font-black uppercase text-white md:text-6xl"
+            >
+              {CLIENTS.map((name) => (
+                <span key={name} className="inline-flex items-center">
+                  <span className="px-8">{name}</span>
+                  <span className="text-amber-400">✦</span>
+                </span>
+              ))}
+            </MarqueeAnimation>
 
-      {/* Clients : marques accompagnées présentées en bandeaux défilants (marquee).
-          Toute la section tient sur un écran, sans scroll supplémentaire. */}
-      <section id="categories" className="relative flex h-[40vh] min-h-[340px] w-full flex-col items-center justify-center overflow-hidden py-10">
-        <div className="mb-8 max-w-2xl px-6 text-center">
-          <span className="font-mono text-[9px] uppercase tracking-widest text-amber-600 bg-amber-50 px-2.5 py-1 rounded border border-amber-200/30">
-            ILS M'ONT FAIT CONFIANCE // CLIENTS
+            <MarqueeAnimation
+              direction="right"
+              baseVelocity={1.4}
+              className="bg-amber-400 py-4 font-display text-4xl font-black uppercase text-neutral-900 md:text-6xl"
+            >
+              {CLIENTS.map((name) => (
+                <span key={name} className="inline-flex items-center">
+                  <span className="px-8">{name}</span>
+                  <span className="text-neutral-900/40">✦</span>
+                </span>
+              ))}
+            </MarqueeAnimation>
+          </div>
+        </div>
+
+        <span className="font-mono text-[9px] uppercase tracking-widest text-amber-400/90">
+          MES DOMAINES // CHOISIS UNE CATÉGORIE
+        </span>
+        <h2 className="mt-4 mb-16 font-display text-3xl font-black tracking-tight text-white md:text-5xl">
+          Ce que{' '}
+          <span
+            className="inline-block translate-y-[0.12em] font-normal text-amber-400"
+            style={{ fontFamily: 'Identic Partner Script, cursive' }}
+          >
+            je fais.
           </span>
-          <h2 className="mt-4 font-display text-2xl md:text-4xl font-black tracking-tight text-neutral-900">
-            J'ai travaillé avec eux:
-          </h2>
-        </div>
+        </h2>
 
-        <div className="flex w-full flex-col gap-4">
-          <MarqueeAnimation
-            direction="left"
-            baseVelocity={1.4}
-            className="bg-neutral-900 py-4 font-display text-4xl font-black uppercase text-white md:text-6xl"
-          >
-            {CLIENTS.map((name) => (
-              <span key={name} className="inline-flex items-center">
-                <span className="px-8">{name}</span>
-                <span className="text-amber-400">✦</span>
-              </span>
-            ))}
-          </MarqueeAnimation>
+        <Dock className="border border-white/10 bg-white/5 backdrop-blur-md">
+          {DOCK.map((item) => {
+            const Icon = item.icon;
+            return (
+              <DockItem
+                key={item.label}
+                onClick={() => setActiveCategory(item.label)}
+                className="group aspect-square cursor-pointer rounded-full border border-white/10 bg-white/10 transition-colors hover:bg-amber-400"
+              >
+                <DockLabel className="border border-white/10 bg-neutral-800 text-white">
+                  {item.label}
+                </DockLabel>
+                <DockIcon>
+                  <Icon className="h-full w-full text-amber-400 transition-colors group-hover:text-neutral-900" />
+                </DockIcon>
+              </DockItem>
+            );
+          })}
+        </Dock>
 
-          <MarqueeAnimation
-            direction="right"
-            baseVelocity={1.4}
-            className="bg-amber-400 py-4 font-display text-4xl font-black uppercase text-neutral-900 md:text-6xl"
-          >
-            {CLIENTS.map((name) => (
-              <span key={name} className="inline-flex items-center">
-                <span className="px-8">{name}</span>
-                <span className="text-neutral-900/40">✦</span>
-              </span>
-            ))}
-          </MarqueeAnimation>
-        </div>
+        <span className="mt-16 font-mono text-[10px] uppercase tracking-widest text-white/40">
+          Clique sur une catégorie pour explorer les projets
+        </span>
       </section>
 
-      {/* Réalisations par catégorie : une catégorie = un « zoom parallax ».
-          L'utilisateur scrolle, arrive sur la catégorie suivante, et ainsi de suite. */}
-      <div id="realisations">
-        {CATEGORIES.map((cat, i) => (
-          <section key={cat.title} className="relative w-full">
-            {/* Écran de titre de la catégorie */}
-            <div className="relative flex h-[70vh] flex-col items-center justify-center px-6 text-center">
-              <span className="font-mono text-[9px] uppercase tracking-widest text-amber-600 bg-amber-50 px-2.5 py-1 rounded border border-amber-200/30">
-                {`CATÉGORIE ${String(i + 1).padStart(2, '0')} // RÉALISATIONS`}
-              </span>
-              <h2 className="mt-5 font-display text-5xl md:text-8xl font-black tracking-tight leading-[0.9] text-neutral-900">
-                {cat.title}
-              </h2>
-              <p className="mt-4 max-w-md font-display text-sm md:text-base text-neutral-500">
-                {cat.subtitle}
-              </p>
-              <span className="mt-8 font-mono text-[10px] uppercase tracking-widest text-neutral-400 animate-pulse">
-                Faites défiler ↓
-              </span>
-            </div>
+      {/* ============================================================= */}
+      {/* SOUS LE HUB : Web design & Montage vidéo mis en avant dans une  */}
+      {/* phrase, via les boutons animés (ripple). Clic → visionneuse.    */}
+      {/* z-[10000] > noise-overlay (sans grain), cohérent avec le hub.   */}
+      {/* ============================================================= */}
+      <section className="relative z-[10000] flex min-h-[70vh] w-full items-center justify-center overflow-hidden bg-black px-6 py-24">
+        <p className="max-w-3xl text-center font-display text-2xl font-semibold leading-relaxed text-white md:text-4xl md:leading-[1.5]">
+          En dehors de tout ça, je me débrouille aussi en{' '}
+          <Button
+            variant="default"
+            icon={<Monitor />}
+            onClick={() => setActiveCategory('Web design')}
+            className="align-middle"
+          >
+            Web design
+          </Button>
+          . Pour moi, en tant que créatif, je ne peux pas négliger le{' '}
+          <Button
+            variant="default"
+            icon={<Film />}
+            onClick={() => setActiveCategory('Montage vidéo')}
+            className="align-middle"
+          >
+            Montage vidéo
+          </Button>
+          .
+        </p>
+      </section>
 
-            {/* Galerie en zoom parallax (visuels du dossier de la catégorie) */}
-            <ZoomParallax
-              images={mediaFor(cat.title)}
-              onImageClick={openZoom}
-            />
-          </section>
-        ))}
-      </div>
-
-      {/* Vue agrandie (lightbox) : clic sur une image → plein écran.
-          « Retour » (bouton, Échap ou retour navigateur) pour revenir derrière. */}
+      {/* ============================================================= */}
+      {/* VISIONNEUSE PAR CATÉGORIE : page blanche plein écran qui monte, */}
+      {/* champ d'images infini (projets), et barre (dock) réduite qui   */}
+      {/* glisse au centre pour naviguer entre les domaines.             */}
+      {/* ============================================================= */}
       <AnimatePresence>
-        {zoomed && (
+        {activeCategory && (
           <motion.div
+            className="fixed inset-0 z-[100000] overflow-hidden bg-white"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
-            onClick={closeZoom}
-            className="fixed inset-0 z-[60] flex items-center justify-center bg-neutral-950/90 backdrop-blur-sm p-6 md:p-12"
+            transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
           >
+            {/* Projets de la catégorie : galerie plein écran à défilement
+                INFINI (torique) au scroll/glisser. Chaque réalisation en entier
+                (proportions d'origine), cadres emboîtés, régénération continue. */}
+            <InfiniteMasonry
+              key={activeCategory}
+              className="absolute inset-0"
+              images={CATEGORY_IMAGES[activeCategory] ?? []}
+              columnWidth={420}
+              gap={20}
+              onImageClick={(src) => setZoomed(src)}
+            />
+
+            {/* Fermer la visionneuse */}
             <button
-              onClick={(e) => {
-                e.stopPropagation();
-                closeZoom();
-              }}
-              className="group absolute top-5 left-5 flex items-center gap-2.5 rounded-full bg-white/10 px-4 py-2.5 font-display text-sm font-semibold text-white backdrop-blur-md transition-colors hover:bg-amber-400 hover:text-neutral-900 cursor-pointer"
+              onClick={() => setActiveCategory(null)}
+              className="group fixed top-5 left-6 z-[100001] flex items-center gap-2.5 rounded-full border border-neutral-200 bg-white/80 px-4 py-2.5 font-display text-sm font-semibold text-neutral-900 shadow-sm backdrop-blur-md transition-colors hover:bg-neutral-900 hover:text-white cursor-pointer"
             >
               <ArrowLeft className="h-4 w-4" />
               <span>Retour</span>
             </button>
-            {/\.mp4($|\?)/i.test(zoomed.src) ? (
-              <motion.video
-                key={zoomed.src}
-                src={zoomed.src}
-                autoPlay
-                muted
-                loop
-                playsInline
-                controls
-                initial={{ scale: 0.92, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.92, opacity: 0 }}
-                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                onClick={(e) => e.stopPropagation()}
-                className="max-h-full max-w-full rounded-lg object-contain shadow-2xl"
-              />
-            ) : (
-              <motion.img
-                key={zoomed.src}
-                src={zoomed.src}
-                alt={zoomed.alt || 'Réalisation'}
-                initial={{ scale: 0.92, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.92, opacity: 0 }}
-                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                onClick={(e) => e.stopPropagation()}
-                className="max-h-full max-w-full rounded-lg object-contain shadow-2xl"
-                draggable={false}
-              />
-            )}
+
+            {/* Barre (dock) réduite qui glisse du centre vers le BAS de la page */}
+            <div className="pointer-events-none absolute inset-0 z-[100001] flex items-end justify-center pb-8">
+              <motion.div
+                initial={{ y: '-42vh', scale: 1.12, opacity: 0 }}
+                animate={{ y: 0, scale: 1, opacity: 1 }}
+                transition={{ delay: 0.25, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                className="pointer-events-auto"
+              >
+                {/* Barre épurée : icône + nom de la section courante.
+                    Un clic passe à la section suivante (cycle, « Tout »
+                    compris — il se comporte comme les autres). */}
+                {ActiveIcon && (
+                  <button
+                    onClick={() => nextCategory && setActiveCategory(nextCategory)}
+                    title={`Suivant : ${nextCategory}`}
+                    className="group flex cursor-pointer items-center gap-3 rounded-full border border-neutral-200 bg-white/85 py-2.5 pl-2.5 pr-5 shadow-xl backdrop-blur-md transition-transform hover:-translate-y-0.5"
+                  >
+                    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-400">
+                      <ActiveIcon className="h-5 w-5 text-neutral-900" />
+                    </span>
+                    <span className="font-display text-sm font-bold uppercase tracking-wide text-neutral-900">
+                      {activeCategory}
+                    </span>
+                    <ChevronRight className="h-4 w-4 text-neutral-400 transition-transform group-hover:translate-x-0.5" />
+                  </button>
+                )}
+              </motion.div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Pied de page (commun à tout le portfolio) */}
-      <Footer />
+      {/* Image agrandie plein écran : clic sur une réalisation → vue complète.
+          Clic n'importe où, bouton ✕ ou Échap pour refermer. */}
+      <AnimatePresence>
+        {zoomed && (
+          <motion.div
+            className="fixed inset-0 z-[100002] flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm md:p-10"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            onClick={() => setZoomed(null)}
+          >
+            <button
+              onClick={() => setZoomed(null)}
+              aria-label="Fermer"
+              className="absolute top-5 right-5 flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white backdrop-blur-md transition-colors hover:bg-white hover:text-neutral-900 cursor-pointer"
+            >
+              <X className="h-5 w-5" />
+            </button>
+            <motion.img
+              key={zoomed}
+              src={zoomed}
+              alt=""
+              draggable={false}
+              initial={{ scale: 0.92, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.92, opacity: 0 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              onClick={(e) => e.stopPropagation()}
+              className="max-h-full max-w-full rounded-lg object-contain shadow-2xl"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }

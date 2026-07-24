@@ -54,37 +54,33 @@ export function ParallaxHero({ onCalendly, onProjects }: ParallaxHeroProps) {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const ctx = gsap.context(() => {
-      // PAS de pin : la parallaxe se joue au fur et à mesure que le hero défile
-      // vers le haut et que la section inférieure se dévoile → les deux sont
-      // synchronisés (la parallaxe ne se termine pas avant le dévoilement).
       // Calques de fond agrandis : marge de couverture pour une TRÈS ample
-      // translation sans jamais découvrir de bord (|décalage| ≤ (scale-1)/2).
-      gsap.set("[data-parallax-layer='1']", { scale: 1.95 });
-      gsap.set("[data-parallax-layer='2']", { scale: 1.65 });
-      gsap.set("[data-parallax-layer='4']", { scale: 1.32 });
+      // translation sans jamais découvrir de bord (T ≤ (scale+1)/2).
+      gsap.set("[data-parallax-layer='1']", { scale: 1.6 });
+      gsap.set("[data-parallax-layer='2']", { scale: 1.4 });
+      gsap.set("[data-parallax-layer='4']", { scale: 1.2 });
 
-      // Section ÉPINGLÉE pendant une distance dédiée : elle reste figée et l'on
-      // VOIT réellement les calques défiler → parallaxe bien visible.
+      // PAS de pin : la parallaxe PROGRESSE au fur et à mesure que la section
+      // sort de l'écran — c'est-à-dire exactement pendant que le footer se
+      // dévoile en dessous. start "top top" (footer pas encore visible, effet à
+      // 0) → end "bottom top" (footer entièrement révélé, effet à 100 %).
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: root,
           start: "top top",
-          end: "+=130%",
+          end: "bottom top",
           scrub: 1,
-          pin: true,
-          anticipatePin: 1,
           invalidateOnRefresh: true,
         },
       });
-      // Profondeur : fond = grand mouvement, premier plan = faible. Point neutre
-      // au centre (-X → +X) → composition en place au milieu, ample dérive de
-      // part et d'autre.
-      tl.fromTo("[data-parallax-layer='1']", { yPercent: -45 }, { yPercent: 45, ease: "none" }, 0);
-      tl.fromTo("[data-parallax-layer='2']", { yPercent: -30 }, { yPercent: 30, ease: "none" }, 0);
-      tl.fromTo("[data-parallax='logo']", { yPercent: -22 }, { yPercent: 22, ease: "none" }, 0);
-      tl.fromTo("[data-parallax='text']", { yPercent: -12 }, { yPercent: 12, ease: "none" }, 0);
-      tl.fromTo("[data-parallax='photo']", { yPercent: -14 }, { yPercent: 14, ease: "none" }, 0);
-      tl.fromTo("[data-parallax-layer='4']", { yPercent: -14 }, { yPercent: 14, ease: "none" }, 0);
+      // Composition en place à pleine vue (0), forte dérive à mesure que le
+      // footer se dévoile. Fond = grand mouvement, premier plan = faible.
+      tl.to("[data-parallax-layer='1']", { yPercent: 115, ease: "none" }, 0);
+      tl.to("[data-parallax-layer='2']", { yPercent: 82, ease: "none" }, 0);
+      tl.to("[data-parallax='logo']", { yPercent: 60, ease: "none" }, 0);
+      tl.to("[data-parallax='text']", { yPercent: 38, ease: "none" }, 0);
+      tl.to("[data-parallax='photo']", { yPercent: 26, ease: "none" }, 0);
+      tl.to("[data-parallax-layer='4']", { yPercent: 22, ease: "none" }, 0);
     }, root);
 
     return () => ctx.revert();
@@ -148,7 +144,7 @@ export function ParallaxHero({ onCalendly, onProjects }: ParallaxHeroProps) {
           src={heroPhoto}
           alt="Spéro Kouton"
           draggable={false}
-          className="h-[68vh] w-auto object-contain object-bottom md:h-[82vh]"
+          className="h-[68vh] w-auto translate-y-[4vh] object-contain object-bottom md:h-[82vh]"
         />
       </div>
 
