@@ -34,10 +34,19 @@ function Model({ progress }: { progress: MotionValue<number> }) {
     const center = box.getCenter(new THREE.Vector3());
     const maxAxis = Math.max(size.x, size.y, size.z) || 1;
     scene.position.set(-center.x, -center.y, -center.z);
-    if (outer.current) {
-      outer.current.scale.setScalar(13 / maxAxis); // grand : occupe la section
-      outer.current.position.set(0, -3, 0); // ancré en bas, FIXE
-    }
+
+    // Desktop : inchangé (grand, ancré en bas y=-3).
+    // Téléphone / tablette (< 1024px) : légèrement remonté + un peu plus petit
+    // → le modèle est visible EN ENTIER.
+    const apply = () => {
+      if (!outer.current) return;
+      const small = window.innerWidth < 1024;
+      outer.current.scale.setScalar((small ? 11 : 13) / maxAxis);
+      outer.current.position.set(0, small ? -1.6 : -3, 0);
+    };
+    apply();
+    window.addEventListener("resize", apply);
+    return () => window.removeEventListener("resize", apply);
   }, [scene]);
 
   // Réagit au scroll : rotation dos → 3/4 face (aucun déplacement de position).

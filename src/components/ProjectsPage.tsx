@@ -369,7 +369,7 @@ export default function ProjectsPage({ onBack }: ProjectsPageProps) {
       {/* ============================================================= */}
       <section
         id="hub"
-        className="relative z-[10000] flex h-screen w-full flex-col items-center justify-center overflow-hidden bg-black px-6 pt-40 text-center md:pt-0"
+        className="relative z-[10000] flex h-screen w-full flex-col items-center justify-start overflow-hidden bg-black px-6 pt-44 text-center md:justify-center md:pt-0"
       >
         {/* CLIENTS : superposés sur le haut de cette section (overlay). */}
         <div className="absolute inset-x-0 top-0 z-20 flex flex-col gap-3 pt-8">
@@ -410,7 +410,7 @@ export default function ProjectsPage({ onBack }: ProjectsPageProps) {
         <span className="font-mono text-[9px] uppercase tracking-widest text-amber-400/90">
           MES DOMAINES // CHOISIS UNE CATÉGORIE
         </span>
-        <h2 className="mt-4 mb-12 font-display text-3xl font-black tracking-tight text-white md:text-5xl">
+        <h2 className="mt-4 mb-8 font-display text-3xl font-black tracking-tight text-white md:mb-12 md:text-5xl">
           Ce que{' '}
           <span
             className="inline-block -translate-y-[0.1em] text-[1.25em] font-normal leading-none text-amber-400"
@@ -442,7 +442,7 @@ export default function ProjectsPage({ onBack }: ProjectsPageProps) {
 
         {/* Web design & Montage vidéo mis en avant, sur le même écran, juste
             sous le dock (boutons animés → ouvrent la visionneuse). */}
-        <p className="mt-12 max-w-2xl text-center font-display text-base font-medium leading-relaxed text-white/90 md:text-lg">
+        <p className="mt-8 max-w-2xl text-center font-display text-sm font-medium leading-relaxed text-white/90 md:mt-12 md:text-lg">
           En dehors de tout ça, je me débrouille aussi en{' '}
           <Button
             variant="default"
