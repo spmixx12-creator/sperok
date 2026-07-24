@@ -5,7 +5,7 @@
 // - `motion/react` (pas framer-motion),
 // - pas de `cn`/Button shadcn → helper `cx` + bouton natif,
 // - palette du site (ambre / crème).
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Plus } from "lucide-react";
 
@@ -26,6 +26,8 @@ interface FloatingActionMenuProps {
   position?: "bottom" | "top";
   /** z-index du bouton (le flou passe juste en dessous). Défaut 50. */
   baseZ?: number;
+  /** Masque (fondu) le bouton — p.ex. quand le footer est à l'écran. */
+  hidden?: boolean;
 }
 
 export default function FloatingActionMenu({
@@ -33,9 +35,15 @@ export default function FloatingActionMenu({
   className,
   position = "bottom",
   baseZ = 50,
+  hidden = false,
 }: FloatingActionMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const isTop = position === "top";
+
+  // Quand le bouton est masqué, on referme le menu s'il était ouvert.
+  useEffect(() => {
+    if (hidden) setIsOpen(false);
+  }, [hidden]);
 
   return (
     <>
@@ -59,7 +67,11 @@ export default function FloatingActionMenu({
         style={{
           zIndex: baseZ,
           top: isTop ? "1.5rem" : "calc(100dvh - 5rem)",
-          transition: "top 0.55s cubic-bezier(0.16, 1, 0.3, 1)",
+          opacity: hidden ? 0 : 1,
+          transform: hidden ? "translateY(1.25rem)" : "none",
+          pointerEvents: hidden ? "none" : "auto",
+          transition:
+            "top 0.55s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease, transform 0.35s ease",
         }}
       >
         <motion.button

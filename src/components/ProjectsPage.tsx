@@ -118,6 +118,20 @@ export default function ProjectsPage({ onBack }: ProjectsPageProps) {
 
   // Domaine ouvert en visionneuse plein écran (null = page normale).
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+
+  // Le bouton de navigation s'arrête à la dernière section : on le masque dès
+  // que le footer entre à l'écran (il ne flotte donc pas par-dessus le footer).
+  const [footerVisible, setFooterVisible] = useState(false);
+  useEffect(() => {
+    const el = document.getElementById('footer');
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => setFooterVisible(entry.isIntersecting),
+      { threshold: 0.01 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
   // Image agrandie plein écran (null = aucune).
   const [zoomed, setZoomed] = useState<string | null>(null);
 
@@ -208,6 +222,7 @@ export default function ProjectsPage({ onBack }: ProjectsPageProps) {
           sous la visionneuse z-[100000]). */}
       <FloatingActionMenu
         baseZ={10050}
+        hidden={footerVisible}
         options={[
           {
             label: "Accueil",
@@ -354,7 +369,7 @@ export default function ProjectsPage({ onBack }: ProjectsPageProps) {
       {/* ============================================================= */}
       <section
         id="hub"
-        className="relative z-[10000] flex h-screen w-full flex-col items-center justify-center overflow-hidden bg-black px-6 text-center"
+        className="relative z-[10000] flex h-screen w-full flex-col items-center justify-center overflow-hidden bg-black px-6 pt-40 text-center md:pt-0"
       >
         {/* CLIENTS : superposés sur le haut de cette section (overlay). */}
         <div className="absolute inset-x-0 top-0 z-20 flex flex-col gap-3 pt-8">
@@ -367,7 +382,7 @@ export default function ProjectsPage({ onBack }: ProjectsPageProps) {
             <MarqueeAnimation
               direction="left"
               baseVelocity={1.4}
-              className="bg-neutral-900 py-4 font-display text-4xl font-black uppercase text-white md:text-6xl"
+              className="bg-neutral-900 py-2.5 font-display text-xl font-black uppercase text-white md:text-4xl"
             >
               {CLIENTS.map((name) => (
                 <span key={name} className="inline-flex items-center">
@@ -380,7 +395,7 @@ export default function ProjectsPage({ onBack }: ProjectsPageProps) {
             <MarqueeAnimation
               direction="right"
               baseVelocity={1.4}
-              className="bg-amber-400 py-4 font-display text-4xl font-black uppercase text-neutral-900 md:text-6xl"
+              className="bg-amber-400 py-2.5 font-display text-xl font-black uppercase text-neutral-900 md:text-4xl"
             >
               {CLIENTS.map((name) => (
                 <span key={name} className="inline-flex items-center">
@@ -395,7 +410,7 @@ export default function ProjectsPage({ onBack }: ProjectsPageProps) {
         <span className="font-mono text-[9px] uppercase tracking-widest text-amber-400/90">
           MES DOMAINES // CHOISIS UNE CATÉGORIE
         </span>
-        <h2 className="mt-4 mb-16 font-display text-3xl font-black tracking-tight text-white md:text-5xl">
+        <h2 className="mt-4 mb-12 font-display text-3xl font-black tracking-tight text-white md:text-5xl">
           Ce que{' '}
           <span
             className="inline-block -translate-y-[0.1em] text-[1.25em] font-normal leading-none text-amber-400"
