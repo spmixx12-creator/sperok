@@ -68,7 +68,28 @@ const BASE_CONFIG: GlobeOptions = {
   baseColor: [1, 1, 1],
   markerColor: AMBER,
   glowColor: [1, 1, 1],
-  markers: [], // pas de points/marqueurs — uniquement la sphère
+  // Bénin mis en avant + points « continents ».
+  markers: [
+    { location: [6.3703, 2.3912], size: 0.14 }, // Cotonou, Bénin (mis en avant)
+    { location: [48.8566, 2.3522], size: 0.05 }, // Europe (Paris)
+    { location: [40.7128, -74.006], size: 0.05 }, // Amérique N. (New York)
+    { location: [-23.5505, -46.6333], size: 0.05 }, // Amérique S. (São Paulo)
+    { location: [35.6762, 139.6503], size: 0.05 }, // Asie (Tokyo)
+    { location: [-33.8688, 151.2093], size: 0.05 }, // Océanie (Sydney)
+    { location: [-26.2041, 28.0473], size: 0.05 }, // Afrique australe (Johannesburg)
+  ],
+  // Liaisons entre le Bénin et les continents.
+  arcs: [
+    { from: [6.3703, 2.3912], to: [48.8566, 2.3522] },
+    { from: [6.3703, 2.3912], to: [40.7128, -74.006] },
+    { from: [6.3703, 2.3912], to: [-23.5505, -46.6333] },
+    { from: [6.3703, 2.3912], to: [35.6762, 139.6503] },
+    { from: [6.3703, 2.3912], to: [-33.8688, 151.2093] },
+    { from: [6.3703, 2.3912], to: [-26.2041, 28.0473] },
+  ],
+  arcColor: AMBER,
+  arcWidth: 0.45,
+  arcHeight: 0.5,
 };
 
 type GlobePalette = Partial<
@@ -173,6 +194,17 @@ export function Globe({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rs, resolvedConfig]);
+
+  // Réagit au mouvement du curseur (globe en arrière-plan → écoute sur window) :
+  // décalage de rotation horizontale selon la position de la souris. La rotation
+  // automatique (infinie) continue par-dessus.
+  useEffect(() => {
+    const onMouse = (e: MouseEvent) => {
+      r.set((e.clientX / window.innerWidth - 0.5) * 1.6);
+    };
+    window.addEventListener("mousemove", onMouse);
+    return () => window.removeEventListener("mousemove", onMouse);
+  }, [r]);
 
   return (
     <div
