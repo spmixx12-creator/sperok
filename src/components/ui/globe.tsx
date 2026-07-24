@@ -200,7 +200,7 @@ export function Globe({
   // automatique (infinie) continue par-dessus.
   useEffect(() => {
     const onMouse = (e: MouseEvent) => {
-      r.set((e.clientX / window.innerWidth - 0.5) * 1.6);
+      r.set((e.clientX / window.innerWidth - 0.5) * 2.6);
     };
     window.addEventListener("mousemove", onMouse);
     return () => window.removeEventListener("mousemove", onMouse);

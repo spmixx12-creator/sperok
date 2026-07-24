@@ -42,28 +42,28 @@ const GLOBE_PALETTE: Record<
   }
 > = {
   day: {
-    dark: 0.15,
-    baseColor: [0.12, 0.28, 0.55],
-    glowColor: [0.45, 0.62, 1],
+    dark: 0.1,
+    baseColor: [0.1, 0.18, 0.38],
+    glowColor: [0.45, 0.6, 1],
     markerColor: AMBER,
-    mapBrightness: 9,
-    diffuse: 1.3,
+    mapBrightness: 12,
+    diffuse: 1.4,
   },
   afternoon: {
-    dark: 0.35,
-    baseColor: [0.12, 0.12, 0.16],
-    glowColor: [0.5, 0.3, 0.06],
+    dark: 0.3,
+    baseColor: [0.09, 0.09, 0.13],
+    glowColor: [0.55, 0.32, 0.06],
     markerColor: AMBER,
-    mapBrightness: 7,
-    diffuse: 1.0,
+    mapBrightness: 10,
+    diffuse: 1.2,
   },
   night: {
     dark: 1,
-    baseColor: [0.18, 0.22, 0.42],
-    glowColor: [0.4, 0.48, 0.85],
+    baseColor: [0.16, 0.22, 0.46],
+    glowColor: [0.42, 0.52, 0.95],
     markerColor: AMBER,
-    mapBrightness: 7,
-    diffuse: 1.2,
+    mapBrightness: 11,
+    diffuse: 1.3,
   },
 };
 
@@ -187,7 +187,7 @@ export function ContactSky({ period }: { period: SkyPeriod }) {
       {period === "night" && <Stars />}
 
       {/* Globe rotatif, adapté au fond du moment */}
-      <div className="absolute left-1/2 top-1/2 aspect-square w-[92vw] max-w-[860px] -translate-x-1/2 -translate-y-1/2 opacity-100">
+      <div className="absolute left-1/2 top-1/2 aspect-square w-[100vw] max-w-[1000px] -translate-x-1/2 -translate-y-1/2 opacity-100">
         <Globe className="!relative !inset-auto !max-w-none" palette={GLOBE_PALETTE[period]} />
       </div>
     </div>
