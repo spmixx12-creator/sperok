@@ -52,10 +52,15 @@ export default function Logo() {
     <a
       href="#hero"
       onClick={(e) => {
-        if (window.location.hash && window.location.hash !== '#hero') {
-          e.preventDefault();
-          window.location.hash = '';
+        // Retour à la 1re section de la 1re page, SANS rejouer l'intro/chargement.
+        e.preventDefault();
+        try {
+          sessionStorage.setItem('sperok_entered', '1');
+        } catch {
+          /* noop */
         }
+        if (window.location.hash) window.location.hash = '';
+        requestAnimationFrame(() => window.scrollTo({ top: 0 }));
       }}
       aria-label="spérok — retour à l'accueil"
       className="fixed top-5 left-6 z-50 block h-7 w-24 md:h-8 md:w-28 cursor-pointer select-none"

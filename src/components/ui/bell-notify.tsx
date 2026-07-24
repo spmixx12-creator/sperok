@@ -62,7 +62,7 @@ const BELL_CSS = `
   100% { rotate: calc(1deg * var(--degofrot)); }
 }
 .rope {
-  height: 50vh;
+  height: 90vh;
   width: 2em;
   translate: 0 -52%;
   background: linear-gradient(90deg, #2d54744d 0%, #000b 30%, transparent 100%),
@@ -353,7 +353,9 @@ const BELL_CSS = `
 .bell-cta {
   position: relative;
   font-size: 6em;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  font-family: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.02em;
   background: #000;
   top: 8em;
   width: fit-content;

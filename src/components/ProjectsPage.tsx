@@ -201,9 +201,17 @@ export default function ProjectsPage({ onBack }: ProjectsPageProps) {
     >
       <div className="noise-overlay" />
 
-      {/* Logo de marque (inspiré de l'entête du site) — retour à l'accueil */}
+      {/* Logo de marque — ramène à la 1re section de l'accueil (sans intro). */}
       <button
-        onClick={onBack}
+        onClick={() => {
+          try {
+            sessionStorage.setItem('sperok_entered', '1');
+          } catch {
+            /* noop */
+          }
+          window.location.hash = '';
+          requestAnimationFrame(() => window.scrollTo({ top: 0 }));
+        }}
         aria-label="spérok — retour à l'accueil"
         className="fixed top-5 left-6 z-50 block h-7 w-24 md:h-8 md:w-28 cursor-pointer select-none"
         style={{
@@ -240,8 +248,9 @@ export default function ProjectsPage({ onBack }: ProjectsPageProps) {
           {
             label: "Contact",
             Icon: <Mail className="h-4 w-4" />,
-            onClick: () =>
-              document.getElementById('footer')?.scrollIntoView({ behavior: 'smooth' }),
+            onClick: () => {
+              window.location.hash = '#/contact';
+            },
           },
         ]}
       />
@@ -376,10 +385,10 @@ export default function ProjectsPage({ onBack }: ProjectsPageProps) {
             le dock à la lanterne, DERRIÈRE le texte (z-[-1]) — le paragraphe la
             recouvre. Le bouton apparaît en bas, sous le paragraphe. Taille
             inchangée. */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 top-[40%] z-[-1] flex justify-center">
-          <div className="pointer-events-auto h-full w-full max-w-sm">
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 top-[62%] z-[-1] flex justify-center">
+          <div className="pointer-events-auto h-full w-full max-w-md">
             <BellNotify
-              size={220}
+              size={300}
               isOn
               disableToggle
               buttonLabel="À propos de moi"

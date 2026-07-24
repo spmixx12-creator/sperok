@@ -32,7 +32,7 @@ const NAV: LinkItem[] = [
   { label: 'Accueil', href: '#hero' },
   { label: 'Aperçus', href: '#apercus' },
   { label: 'À propos', href: '#about' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Contact', href: '#/contact' },
 ];
 
 const SOCIAL: LinkItem[] = [

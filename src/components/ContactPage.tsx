@@ -7,7 +7,7 @@
 import { useLayoutEffect, useState } from 'react';
 import { ArrowLeft, Mail, MessageCircle, Phone, Download } from 'lucide-react';
 import cvFile from '../créa/Beige Noir Moderne Minimaliste CV (5).png';
-import { GradientDots } from './ui/gradient-dots';
+import { Globe } from './ui/globe';
 
 const ACCENT = '#F5B419';
 const EMAIL = 'koutonsperop@gmail.com';
@@ -51,8 +51,12 @@ export default function ContactPage({ onBack }: ContactPageProps) {
 
   return (
     <div className="relative min-h-screen w-full overflow-x-hidden bg-[#0a0a0a] text-white font-sans selection:bg-[#F5B419] selection:text-neutral-900">
-      {/* Fond : points en dégradé animés */}
-      <GradientDots duration={20} />
+      {/* Fond : globe rotatif — couleurs selon l'heure réelle au Bénin */}
+      <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+        <div className="absolute left-1/2 top-1/2 aspect-square w-[min(120vw,900px)] -translate-x-1/2 -translate-y-1/2 opacity-95">
+          <Globe className="!relative !inset-auto !max-w-none" />
+        </div>
+      </div>
 
       {/* Retour */}
       <button

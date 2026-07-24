@@ -142,8 +142,7 @@ const Info: FC<{
     )}
 
     <a
-      href="#contact"
-      onClick={onBack}
+      href="#/contact"
       className="group mt-4 inline-flex w-fit items-center gap-2 rounded-full px-5 py-2.5 font-display text-sm font-semibold text-neutral-900 transition-transform hover:-translate-y-0.5"
       style={{ backgroundColor: ACCENT }}
     >

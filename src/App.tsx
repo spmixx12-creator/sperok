@@ -198,9 +198,19 @@ function HighlightFill({ children }: { children: React.ReactNode }) {
   );
 }
 
-// Mémorise (au niveau module) que l'utilisateur a déjà vu l'intro du hero, afin
-// de ne PAS la rejouer s'il revient sur l'accueil depuis la page Projets.
-let hasEnteredSite = false;
+// Mémorise en sessionStorage que l'utilisateur a déjà vu l'intro : elle ne se
+// joue qu'à la PREMIÈRE arrivée sur le portfolio (pas lors des retours à
+// l'accueil via le logo / la navigation, tant que l'onglet reste ouvert).
+export const ENTERED_KEY = 'sperok_entered';
+export const hasEntered = () =>
+  typeof window !== 'undefined' && sessionStorage.getItem(ENTERED_KEY) === '1';
+export const markEntered = () => {
+  try {
+    sessionStorage.setItem(ENTERED_KEY, '1');
+  } catch {
+    /* noop */
+  }
+};
 
 // Lien Calendly de Spéro (type de RDV « 30 min »). Calendly envoie un e-mail à
 // chaque réservation et l'ajoute à l'agenda Google/Outlook connecté.
@@ -300,11 +310,11 @@ function HomePage({ onOpenProjects }: HomePageProps) {
   const [stickers, setStickers] = useState<Sticker[]>([]);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [activeMessageIndex, setActiveMessageIndex] = useState(0);
-  const [showIntro, setShowIntro] = useState(!hasEnteredSite);
+  const [showIntro, setShowIntro] = useState(() => !hasEntered());
   // Devient true une fois l'animation d'entrée du hero terminée (galerie stabilisée).
-  const [heroIntroDone, setHeroIntroDone] = useState(hasEnteredSite);
+  const [heroIntroDone, setHeroIntroDone] = useState(() => hasEntered());
   // Capturé au montage : si on est déjà entré, la galerie saute son intro.
-  const skipHeroIntro = useRef(hasEnteredSite).current;
+  const skipHeroIntro = useRef(hasEntered()).current;
   // Vrai quand la dernière section (hero « À propos », #contact) est à l'écran
   // → le bouton de navigation se déplace alors vers le haut à droite.
   const [atLastSection, setAtLastSection] = useState(false);
@@ -388,10 +398,10 @@ function HomePage({ onOpenProjects }: HomePageProps) {
     };
   }, [heroIntroDone]);
 
-  // Mémorise que l'intro a été vue → pas de relecture si retour depuis Projets.
+  // Mémorise que l'intro a été vue → pas de relecture (retour via logo/nav).
   useEffect(() => {
-    if (heroIntroDone) hasEnteredSite = true;
-  }, [heroIntroDone]);
+    if (!showIntro || heroIntroDone) markEntered();
+  }, [showIntro, heroIntroDone]);
 
   // Load chat messages sequentially
   const chatSequence = [
@@ -528,7 +538,29 @@ function HomePage({ onOpenProjects }: HomePageProps) {
             onClick: () => handleScrollToSection('hero'),
           },
           {
-            label: 'À propos',
+            label: 'Aperçu',
+            Icon: <LayoutGrid className="h-4 w-4" />,
+            onClick: () => handleScrollToSection('apercus'),
+          },
+          {
+            label: 'Expertise',
+            Icon: <Zap className="h-4 w-4" />,
+            onClick: () => handleScrollToSection('about'),
+          },
+          {
+            label: 'Horizon',
+            Icon: <Rocket className="h-4 w-4" />,
+            onClick: () => handleScrollToSection('contact'),
+          },
+          {
+            label: 'Mes projets',
+            Icon: <Layers className="h-4 w-4" />,
+            onClick: () => {
+              window.location.hash = '#/projets';
+            },
+          },
+          {
+            label: 'Mon histoire',
             Icon: <User className="h-4 w-4" />,
             onClick: () => {
               window.location.hash = '#/a-propos';
@@ -537,7 +569,9 @@ function HomePage({ onOpenProjects }: HomePageProps) {
           {
             label: 'Contact',
             Icon: <Mail className="h-4 w-4" />,
-            onClick: () => handleScrollToSection('contact'),
+            onClick: () => {
+              window.location.hash = '#/contact';
+            },
           },
         ]}
       />
@@ -870,21 +904,26 @@ export default function App() {
     return () => window.removeEventListener('hashchange', onHashChange);
   }, []);
 
+  // Bouton « Retour » : revient à l'écran précédent (historique). Repli sur
+  // l'accueil si on a ouvert la page directement (aucun historique interne).
+  const goBack = () => {
+    if (window.history.length > 1) window.history.back();
+    else window.location.hash = '';
+  };
+
   if (route === ABOUT_HASH_EN || route === ABOUT_HASH_FR) {
-    return <AboutPage onBack={() => { window.location.hash = ''; }} />;
+    return <AboutPage onBack={goBack} />;
   }
 
   if (route === CONTACT_HASH) {
-    return <ContactPage onBack={() => { window.location.hash = ''; }} />;
+    return <ContactPage onBack={goBack} />;
   }
 
   if (route === WEBDESIGN_HASH || route === MONTAGE_HASH) {
     return (
       <ShowcasePage
         kind={route === MONTAGE_HASH ? 'montage-video' : 'web-design'}
-        onBack={() => {
-          window.location.hash = PROJECTS_HASH;
-        }}
+        onBack={goBack}
       />
     );
   }
