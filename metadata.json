@@ -1,0 +1,6 @@
+{
+  "name": "Interactive Minimalist Portfolio",
+  "description": "An interactive, minimalist creative portfolio with fluid transitions, signature drawing animations, custom floating design tokens, and smooth scroll interactions.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
