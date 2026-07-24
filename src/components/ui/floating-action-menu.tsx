@@ -24,12 +24,15 @@ interface FloatingActionMenuProps {
   className?: string;
   /** Ancrage vertical du bouton : "bottom" (défaut) ou "top" (haut à droite). */
   position?: "bottom" | "top";
+  /** z-index du bouton (le flou passe juste en dessous). Défaut 50. */
+  baseZ?: number;
 }
 
 export default function FloatingActionMenu({
   options,
   className,
   position = "bottom",
+  baseZ = 50,
 }: FloatingActionMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const isTop = position === "top";
@@ -45,14 +48,16 @@ export default function FloatingActionMenu({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
             onClick={() => setIsOpen(false)}
-            className="fixed inset-0 z-40 bg-neutral-950/40 backdrop-blur-md cursor-pointer"
+            style={{ zIndex: baseZ - 10 }}
+            className="fixed inset-0 bg-neutral-950/40 backdrop-blur-md cursor-pointer"
           />
         )}
       </AnimatePresence>
 
       <div
-        className={cx("fixed right-8 z-50", className)}
+        className={cx("fixed right-8", className)}
         style={{
+          zIndex: baseZ,
           top: isTop ? "1.5rem" : "calc(100dvh - 5rem)",
           transition: "top 0.55s cubic-bezier(0.16, 1, 0.3, 1)",
         }}

@@ -285,7 +285,7 @@ export default function ShowcasePage({ kind, onBack }: ShowcasePageProps) {
   // Web design : défilement de page (window) → l'épinglage sticky fonctionne.
   if (isWeb) {
     return (
-      <div className="relative min-h-screen w-full overflow-x-hidden bg-[#0a0a0a] text-white font-sans selection:bg-[#F5B419] selection:text-neutral-900">
+      <div className="relative min-h-screen w-full bg-[#0a0a0a] text-white font-sans selection:bg-[#F5B419] selection:text-neutral-900">
         {header}
         {projects.map((p) => (
           <PinnedScene key={p.index} project={p} total={total} onBack={onBack} />

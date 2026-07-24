@@ -1,10 +1,11 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Home, LayoutGrid, ArrowUp, Users, ArrowLeft, Monitor, Sparkles, Palette, Share2, Clapperboard, Printer, Film, ChevronRight, X, type LucideIcon } from 'lucide-react';
+import { Home, LayoutGrid, ArrowLeft, Monitor, Palette, Share2, Clapperboard, Printer, Film, ChevronRight, X, User, Mail, type LucideIcon } from 'lucide-react';
 import { ContainerScroll } from './ui/container-scroll-animation';
 import { Dock, DockItem, DockIcon, DockLabel } from './ui/dock';
 import { InfiniteMasonry } from './ui/infinite-masonry';
 import { Button } from './ui/new-button';
+import { Component as Footer } from './ui/footer-taped-design';
 import { MarqueeAnimation } from './ui/marquee-effect';
 import FloatingActionMenu from './ui/floating-action-menu';
 import Lenis from 'lenis';
@@ -203,47 +204,28 @@ export default function ProjectsPage({ onBack }: ProjectsPageProps) {
         }}
       />
 
-      {/* Navigation flottante (remplace la barre supérieure) */}
+      {/* Navigation flottante — toujours visible (au-dessus du hub z-[10000],
+          sous la visionneuse z-[100000]). */}
       <FloatingActionMenu
+        baseZ={10050}
         options={[
           {
             label: "Accueil",
             Icon: <Home className="h-4 w-4" />,
             onClick: onBack,
           },
-          // Sections de la page Projets, dans l'ordre de défilement.
           {
-            label: "Intro",
-            Icon: <ArrowUp className="h-4 w-4" />,
-            onClick: () => window.scrollTo({ top: 0, behavior: 'smooth' }),
-          },
-          {
-            label: "Web Design",
-            Icon: <Monitor className="h-4 w-4" />,
-            onClick: () =>
-              document.getElementById('sites')?.scrollIntoView({ behavior: 'smooth' }),
-          },
-          {
-            label: "Mes réalisations",
-            Icon: <LayoutGrid className="h-4 w-4" />,
-            onClick: () =>
-              document
-                .getElementById('realisations')
-                ?.scrollIntoView({ behavior: 'smooth' }),
-          },
-          {
-            label: "Clients",
-            Icon: <Sparkles className="h-4 w-4" />,
-            onClick: () =>
-              document.getElementById('categories')?.scrollIntoView({ behavior: 'smooth' }),
-          },
-          // Accès à l'autre page.
-          {
-            label: "Mes Clients",
-            Icon: <Users className="h-4 w-4" />,
+            label: "À propos",
+            Icon: <User className="h-4 w-4" />,
             onClick: () => {
-              window.location.hash = '#/clients';
+              window.location.hash = '#/a-propos';
             },
+          },
+          {
+            label: "Contact",
+            Icon: <Mail className="h-4 w-4" />,
+            onClick: () =>
+              document.getElementById('footer')?.scrollIntoView({ behavior: 'smooth' }),
           },
         ]}
       />
@@ -467,6 +449,11 @@ export default function ProjectsPage({ onBack }: ProjectsPageProps) {
           .
         </p>
       </section>
+
+      {/* Footer identique à celui de l'accueil (au-dessus du grain, z-[10000]). */}
+      <div className="relative z-[10000]">
+        <Footer />
+      </div>
 
       {/* ============================================================= */}
       {/* VISIONNEUSE PAR CATÉGORIE : page blanche plein écran qui monte, */}
