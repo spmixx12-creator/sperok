@@ -14,6 +14,45 @@
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 }
 
+/* ── Effet « wagon » : léger balancement de l'overlay (page contact) ───── */
+@keyframes train-bob {
+  0%, 100% { transform: translateY(0) scale(1.03); }
+  50% { transform: translateY(-6px) scale(1.03); }
+}
+.train-bob {
+  animation: train-bob 3s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* ── Liquid glass (page contact cinématique) ───────────────────────────── */
+/* Verre dépoli SOMBRE : fond suffisamment opaque pour que textes et champs
+   restent bien visibles par-dessus les vidéos (pas de transparence « fenêtre »). */
+.liquid-glass {
+  background: rgba(20, 17, 16, 0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: none;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.12), 0 10px 34px rgba(0, 0, 0, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.liquid-glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.4px;
+  background: linear-gradient(180deg,
+    rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.15) 20%,
+    rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, 0) 60%,
+    rgba(255, 255, 255, 0.15) 80%, rgba(255, 255, 255, 0.45) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
