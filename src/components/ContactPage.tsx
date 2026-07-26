@@ -14,6 +14,7 @@ import { useLayoutEffect, useState } from 'react';
 import { ArrowLeft, Mail, MessageCircle, Phone, Download, Send } from 'lucide-react';
 import cvFile from '../créa/Beige Noir Moderne Minimaliste CV (5).png';
 import logoMask from '../créa/sperok-mask.png';
+import LoopingVideo from './ui/looping-video';
 
 const EMAIL = 'koutonsperop@gmail.com';
 const WHATSAPP = '2290143202240'; // numéro qui reçoit les messages du formulaire
@@ -92,16 +93,16 @@ export default function ContactPage({ onBack }: ContactPageProps) {
 
   return (
     <section className="relative min-h-screen w-full overflow-hidden bg-[#191514] font-sans selection:bg-[#F5B419] selection:text-[#191514]">
-      {/* ── Couche vidéo : 4 fonds plein écran en fondu croisé ───────────── */}
+      {/* ── Couche vidéo : 4 fonds plein écran en fondu croisé ────────────
+          Chaque vidéo boucle « sans couture » (double-buffer + fondu de
+          jointure) pour qu'on ne remarque pas la reprise. */}
       {VIDEOS.map((v, i) => (
-        <video
+        <LoopingVideo
           key={v.src}
           src={v.src}
-          autoPlay
-          muted
-          loop
-          playsInline
-          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ease-in-out ${
+          active={i === activeVideo}
+          fade={1}
+          className={`absolute inset-0 h-full w-full transition-opacity duration-1000 ease-in-out ${
             i === activeVideo ? 'opacity-100' : 'opacity-0'
           }`}
         />
@@ -153,8 +154,8 @@ export default function ContactPage({ onBack }: ContactPageProps) {
           </button>
         </nav>
 
-        {/* Hero + formulaire */}
-        <main className="grid flex-1 grid-cols-1 items-center gap-10 py-12 lg:grid-cols-2 lg:gap-16">
+        {/* Hero + formulaire — regroupés au centre, dans la vitre du wagon */}
+        <main className="mx-auto grid w-full max-w-4xl flex-1 grid-cols-1 items-center gap-5 py-8 lg:grid-cols-2 lg:gap-6">
           {/* Colonne gauche : accroche + coordonnées (carte opaque) */}
           <div className="liquid-glass flex flex-col rounded-3xl p-6 md:p-8">
             <span
@@ -317,7 +318,7 @@ export default function ContactPage({ onBack }: ContactPageProps) {
             ))}
           </div>
           <span className="font-mono text-[10px] uppercase tracking-widest text-white/60">
-            Portfolio · Design intentionnel · Bénin
+            Portfolio · Designer Spéro.K · Bénin
           </span>
         </footer>
       </div>

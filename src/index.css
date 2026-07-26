@@ -28,11 +28,12 @@
 /* Verre dépoli SOMBRE : fond suffisamment opaque pour que textes et champs
    restent bien visibles par-dessus les vidéos (pas de transparence « fenêtre »). */
 .liquid-glass {
-  background: rgba(20, 17, 16, 0.82);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  background: rgba(255, 255, 255, 0.05);
+  background-blend-mode: luminosity;
+  backdrop-filter: blur(14px) saturate(120%);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
   border: none;
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.12), 0 14px 40px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.18), 0 16px 44px rgba(0, 0, 0, 0.3);
   position: relative;
   overflow: hidden;
 }
