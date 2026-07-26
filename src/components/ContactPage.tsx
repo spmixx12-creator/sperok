@@ -115,12 +115,13 @@ export default function ContactPage({ onBack }: ContactPageProps) {
         className="train-bob pointer-events-none absolute inset-0 z-[1] h-full w-full object-cover"
       />
 
-      {/* Voile sombre pour garder tous les éléments bien visibles */}
+      {/* Voile léger : la lisibilité est portée par les cartes ; la vitre du
+          milieu reste visible dans l'écart entre les deux colonnes. */}
       <div
         className="absolute inset-0 z-[1]"
         style={{
           background:
-            'linear-gradient(180deg, rgba(25,21,20,0.72) 0%, rgba(25,21,20,0.42) 30%, rgba(25,21,20,0.5) 65%, rgba(25,21,20,0.82) 100%)',
+            'linear-gradient(180deg, rgba(25,21,20,0.45) 0%, rgba(25,21,20,0.2) 35%, rgba(25,21,20,0.24) 65%, rgba(25,21,20,0.55) 100%)',
         }}
       />
 
@@ -154,16 +155,16 @@ export default function ContactPage({ onBack }: ContactPageProps) {
 
         {/* Hero + formulaire */}
         <main className="grid flex-1 grid-cols-1 items-center gap-10 py-12 lg:grid-cols-2 lg:gap-16">
-          {/* Colonne gauche : accroche + coordonnées */}
-          <div className="flex flex-col">
+          {/* Colonne gauche : accroche + coordonnées (carte opaque) */}
+          <div className="liquid-glass flex flex-col rounded-3xl p-6 md:p-8">
             <span
-              className="liquid-glass inline-flex w-fit items-center gap-2 rounded-full px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-white"
+              className="inline-flex w-fit items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-white"
             >
               <span className="h-2 w-2 animate-pulse rounded-full" style={{ backgroundColor: ACCENT }} />
               Disponible pour vos projets
             </span>
 
-            <h1 className="mt-6 font-display text-5xl font-black uppercase leading-[0.9] tracking-tight text-white sm:text-6xl md:text-7xl lg:text-[5.25rem]">
+            <h1 className="mt-5 font-display text-4xl font-black uppercase leading-[0.95] tracking-tight text-white sm:text-5xl lg:text-6xl">
               Dites <span style={{ color: ACCENT }}>salut.</span>
             </h1>
 
@@ -176,7 +177,7 @@ export default function ContactPage({ onBack }: ContactPageProps) {
             <div className="mt-8 flex flex-col gap-3">
               <a
                 href={`mailto:${EMAIL}`}
-                className="liquid-glass group flex items-center gap-3.5 rounded-2xl px-4 py-3 transition-transform hover:-translate-y-0.5"
+                className="group flex items-center gap-3.5 rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 transition-colors hover:bg-white/[0.1]"
               >
                 <span
                   className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
@@ -195,7 +196,7 @@ export default function ContactPage({ onBack }: ContactPageProps) {
                   href="https://wa.me/2290143202240"
                   target="_blank"
                   rel="noreferrer"
-                  className="liquid-glass group flex flex-1 items-center gap-3.5 rounded-2xl px-4 py-3 transition-transform hover:-translate-y-0.5"
+                  className="group flex flex-1 items-center gap-3.5 rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 transition-colors hover:bg-white/[0.1]"
                 >
                   <span
                     className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
@@ -211,7 +212,7 @@ export default function ContactPage({ onBack }: ContactPageProps) {
 
                 <a
                   href="tel:+2290153305895"
-                  className="liquid-glass group flex flex-1 items-center gap-3.5 rounded-2xl px-4 py-3 transition-transform hover:-translate-y-0.5"
+                  className="group flex flex-1 items-center gap-3.5 rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 transition-colors hover:bg-white/[0.1]"
                 >
                   <span
                     className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
