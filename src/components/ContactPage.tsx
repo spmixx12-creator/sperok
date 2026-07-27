@@ -89,12 +89,12 @@ export default function ContactPage({ onBack }: ContactPageProps) {
   };
 
   const field =
-    'w-full rounded-xl border border-white/20 bg-white/[0.07] px-4 py-3 font-sans text-sm text-white outline-none transition-colors placeholder:text-white/60 focus:border-[#F5B419]/70 focus:bg-white/[0.12]';
+    'w-full rounded-xl border border-white/20 bg-white/[0.07] px-4 py-2.5 font-sans text-sm text-white outline-none transition-colors placeholder:text-white/60 focus:border-[#F5B419]/70 focus:bg-white/[0.12] sm:py-3';
 
   const label = 'block font-mono text-[10px] uppercase tracking-widest text-[#F5B419]';
 
   return (
-    <section className="relative min-h-screen w-full overflow-hidden bg-[#191514] font-sans selection:bg-[#F5B419] selection:text-[#191514]">
+    <section className="relative h-[100svh] w-full overflow-hidden bg-[#191514] font-sans selection:bg-[#F5B419] selection:text-[#191514] lg:h-auto lg:min-h-screen">
       {/* ── Couche vidéo : 4 fonds plein écran en fondu croisé ────────────
           Chaque vidéo boucle « sans couture » (double-buffer + fondu de
           jointure) pour qu'on ne remarque pas la reprise. */}
@@ -129,7 +129,7 @@ export default function ContactPage({ onBack }: ContactPageProps) {
       />
 
       {/* ── Contenu ──────────────────────────────────────────────────────── */}
-      <div className="relative z-[2] flex min-h-screen flex-col px-6 py-6 sm:px-10 sm:py-8 lg:px-16">
+      <div className="relative z-[2] flex h-full flex-col px-5 py-4 sm:px-10 sm:py-8 lg:h-auto lg:min-h-screen lg:px-16">
         {/* Navigation */}
         <nav className="flex items-center justify-between">
           <span
@@ -156,10 +156,14 @@ export default function ContactPage({ onBack }: ContactPageProps) {
           </button>
         </nav>
 
-        {/* Hero + formulaire — regroupés au centre, dans la vitre du wagon */}
-        <main className="mx-auto grid w-full max-w-4xl flex-1 grid-cols-1 items-center gap-5 py-8 lg:grid-cols-2 lg:gap-6">
+        {/* Hero + formulaire — regroupés au centre, dans la vitre du wagon.
+            Mobile : hauteur d'écran fixe ; le bloc central se centre et ne
+            déborde pas (repli sur un léger défilement interne uniquement sur
+            très petits écrans), pour garder le wagon et le fond toujours vus. */}
+        <main className="flex min-h-0 flex-1 overflow-y-auto py-2 [scrollbar-width:none] lg:overflow-visible lg:py-8">
+          <div className="m-auto grid w-full max-w-4xl grid-cols-1 gap-3 lg:grid-cols-2 lg:gap-6">
           {/* Colonne gauche : accroche + coordonnées (carte opaque) */}
-          <div className="liquid-glass flex flex-col rounded-3xl p-6 md:p-8">
+          <div className="liquid-glass flex flex-col rounded-2xl p-4 sm:rounded-3xl sm:p-6 md:p-8">
             <span
               className="inline-flex w-fit items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-white"
             >
@@ -167,20 +171,20 @@ export default function ContactPage({ onBack }: ContactPageProps) {
               Disponible pour vos projets
             </span>
 
-            <h1 className="mt-5 font-display text-4xl font-black uppercase leading-[0.95] tracking-tight text-white sm:text-5xl lg:text-6xl">
+            <h1 className="mt-3 font-display text-3xl font-black uppercase leading-[0.95] tracking-tight text-white sm:mt-5 sm:text-5xl lg:text-6xl">
               Dites <span style={{ color: ACCENT }}>salut.</span>
             </h1>
 
-            <p className="mt-6 max-w-md font-sans text-base leading-relaxed text-white/85">
+            <p className="mt-4 hidden max-w-md font-sans text-sm leading-relaxed text-white/85 sm:mt-6 sm:block sm:text-base">
               Vous avez une idée, un projet, ou juste envie de discuter design ?
               Je suis à un message de distance.
             </p>
 
             {/* Coordonnées */}
-            <div className="mt-8 flex flex-col gap-3">
+            <div className="mt-4 flex flex-col gap-2.5 sm:mt-8 sm:gap-3">
               <a
                 href={`mailto:${EMAIL}`}
-                className="group flex items-center gap-3.5 rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 transition-colors hover:bg-white/[0.1]"
+                className="group flex items-center gap-3.5 rounded-2xl border border-white/10 bg-white/[0.06] px-3.5 py-2.5 transition-colors hover:bg-white/[0.1] sm:px-4 sm:py-3"
               >
                 <span
                   className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
@@ -199,7 +203,7 @@ export default function ContactPage({ onBack }: ContactPageProps) {
                   href="https://wa.me/2290143202240"
                   target="_blank"
                   rel="noreferrer"
-                  className="group flex flex-1 items-center gap-3.5 rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 transition-colors hover:bg-white/[0.1]"
+                  className="group flex flex-1 items-center gap-3.5 rounded-2xl border border-white/10 bg-white/[0.06] px-3.5 py-2.5 transition-colors hover:bg-white/[0.1] sm:px-4 sm:py-3"
                 >
                   <span
                     className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
@@ -215,7 +219,7 @@ export default function ContactPage({ onBack }: ContactPageProps) {
 
                 <a
                   href="tel:+2290153305895"
-                  className="group flex flex-1 items-center gap-3.5 rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 transition-colors hover:bg-white/[0.1]"
+                  className="group flex flex-1 items-center gap-3.5 rounded-2xl border border-white/10 bg-white/[0.06] px-3.5 py-2.5 transition-colors hover:bg-white/[0.1] sm:px-4 sm:py-3"
                 >
                   <span
                     className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
@@ -235,9 +239,9 @@ export default function ContactPage({ onBack }: ContactPageProps) {
           {/* Colonne droite : formulaire en liquid glass */}
           <form
             onSubmit={handleSubmit}
-            className="liquid-glass flex w-full flex-col gap-3.5 rounded-3xl p-6 md:p-8"
+            className="liquid-glass flex w-full flex-col gap-2.5 rounded-2xl p-4 sm:gap-3.5 sm:rounded-3xl sm:p-6 md:p-8"
           >
-            <h2 className="font-display text-2xl font-black uppercase tracking-tight text-white md:text-3xl">
+            <h2 className="font-display text-xl font-black uppercase tracking-tight text-white sm:text-2xl md:text-3xl">
               Écrivez-moi
             </h2>
             <input
@@ -256,7 +260,7 @@ export default function ContactPage({ onBack }: ContactPageProps) {
               placeholder="Adresse email"
               className={field}
             />
-            <div className="flex flex-col gap-3.5 sm:flex-row">
+            <div className="flex flex-row gap-2.5 sm:gap-3.5">
               <input
                 type="text"
                 value={sujet}
@@ -277,14 +281,14 @@ export default function ContactPage({ onBack }: ContactPageProps) {
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Votre message"
-              rows={4}
+              rows={3}
               className={`${field} resize-none`}
             />
 
-            <div className="mt-1 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-1 flex flex-row gap-2.5 sm:gap-3">
               <button
                 type="submit"
-                className="flex flex-1 items-center justify-center gap-2 rounded-xl border px-6 py-3.5 font-display text-xs font-bold uppercase tracking-wider transition-transform hover:-translate-y-0.5 active:scale-95"
+                className="flex flex-1 items-center justify-center gap-2 rounded-xl border px-4 py-3 font-display text-xs font-bold uppercase tracking-wider sm:px-6 sm:py-3.5 transition-transform hover:-translate-y-0.5 active:scale-95"
                 style={{ backgroundColor: ACCENT, color: DARK, borderColor: ACCENT }}
               >
                 <Send className="h-4 w-4" />
@@ -293,17 +297,18 @@ export default function ContactPage({ onBack }: ContactPageProps) {
               <a
                 href={cvFile}
                 download="CV-Spero-Kouton.png"
-                className="flex items-center justify-center gap-2 rounded-xl border border-white/25 bg-white/5 px-6 py-3.5 font-display text-xs font-bold uppercase tracking-wider text-white backdrop-blur-md transition-colors hover:border-[#F5B419]/60 hover:text-[#F5B419]"
+                className="flex items-center justify-center gap-2 rounded-xl border border-white/25 bg-white/5 px-4 py-3 font-display text-xs font-bold uppercase tracking-wider sm:px-6 sm:py-3.5 text-white backdrop-blur-md transition-colors hover:border-[#F5B419]/60 hover:text-[#F5B419]"
               >
                 <Download className="h-4 w-4" />
                 <span>CV</span>
               </a>
             </div>
           </form>
+          </div>
         </main>
 
         {/* Sélecteur d'ambiances (vidéos) */}
-        <footer className="flex flex-col gap-4 border-t border-white/15 pt-5 sm:flex-row sm:items-end sm:justify-between">
+        <footer className="flex flex-col gap-3 border-t border-white/15 pt-3 sm:flex-row sm:items-end sm:justify-between sm:gap-4 sm:pt-5">
           <div className="flex flex-col gap-2.5">
             {/* Indice interactif : inviter à changer d'ambiance (disparaît au 1er clic) */}
             <div
@@ -333,7 +338,7 @@ export default function ContactPage({ onBack }: ContactPageProps) {
               ))}
             </div>
           </div>
-          <span className="font-mono text-[10px] uppercase tracking-widest text-white/60">
+          <span className="hidden font-mono text-[10px] uppercase tracking-widest text-white/60 sm:block">
             Portfolio · Designer Spéro.K · Bénin
           </span>
         </footer>

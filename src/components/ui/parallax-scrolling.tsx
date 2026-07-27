@@ -156,7 +156,9 @@ export function ParallaxHero({ onCalendly, onProjects }: ParallaxHeroProps) {
         className="relative z-20 mt-auto hidden w-full items-center gap-8 lg:grid lg:grid-cols-12"
       >
         <div className="flex flex-col items-start text-left lg:col-span-8">
-          <h1 className="font-display text-5xl font-black uppercase leading-[0.95] tracking-tight text-white md:text-7xl lg:text-8xl">
+          {/* Effet négatif : le titre blanc s'inverse là où il chevauche le
+              logo « spérok » blanc en fond → toujours lisible au premier plan. */}
+          <h1 className="font-display text-5xl font-black uppercase leading-[0.95] tracking-tight text-white mix-blend-difference md:text-7xl lg:text-8xl">
             Design, <br />
             Appliqué <br />
             Différemment.
@@ -202,7 +204,8 @@ export function ParallaxHero({ onCalendly, onProjects }: ParallaxHeroProps) {
         data-parallax="text"
         className="relative z-20 flex flex-col items-center gap-6 pt-4 text-center lg:hidden"
       >
-        <h1 className="font-display text-5xl font-black uppercase leading-[0.95] tracking-tight text-white sm:text-6xl md:text-7xl">
+        {/* Effet négatif : titre lisible même par-dessus le logo blanc en fond. */}
+        <h1 className="font-display text-5xl font-black uppercase leading-[0.95] tracking-tight text-white mix-blend-difference sm:text-6xl md:text-7xl">
           Design, <br />
           Appliqué <br />
           Différemment.
@@ -223,25 +226,6 @@ export function ParallaxHero({ onCalendly, onProjects }: ParallaxHeroProps) {
             <span>Mes Réalisations</span>
           </button>
         </div>
-
-        <ul className="flex flex-wrap justify-center gap-x-6 gap-y-2 font-display text-xs font-semibold uppercase tracking-wider text-white">
-          <li className="flex items-center gap-2"><Zap className="h-3.5 w-3.5 text-[#F5B419]" /> <span>Créatif</span></li>
-          <li className="flex items-center gap-2"><Shield className="h-3.5 w-3.5 text-[#F5B419]" /> <span>Fiable</span></li>
-          <li className="flex items-center gap-2"><Target className="h-3.5 w-3.5 text-[#F5B419]" /> <span>Stratège</span></li>
-          <li className="flex items-center gap-2"><Hammer className="h-3.5 w-3.5 text-[#F5B419]" /> <span>Bâtisseur</span></li>
-          <li className="flex items-center gap-2"><Rocket className="h-3.5 w-3.5 text-[#F5B419]" /> <span>Efficace</span></li>
-        </ul>
-      </div>
-
-      {/* MOBILE / TABLETTE : paragraphe centré en bas, effet négatif
-          (mix-blend-difference) → reste lisible sur tout fond. En parallaxe. */}
-      <div
-        data-parallax="text"
-        className="absolute inset-x-0 bottom-0 z-20 px-6 pb-6 lg:hidden"
-      >
-        <p className="mx-auto max-w-xs text-center text-sm font-semibold leading-relaxed text-white mix-blend-difference">
-          J'accompagne les marques de la conception à la concrétisation. Mon objectif : allier beauté structurelle et identité forte pour marquer les esprits.
-        </p>
       </div>
     </section>
   );
