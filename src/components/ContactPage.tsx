@@ -11,7 +11,7 @@
 //     garder tous les éléments bien visibles.
 // Le formulaire ouvre WhatsApp pré-rempli. Téléchargement du CV.
 import { useLayoutEffect, useState } from 'react';
-import { ArrowLeft, Mail, MessageCircle, Phone, Download, Send } from 'lucide-react';
+import { ArrowLeft, Mail, MessageCircle, Phone, Download, Send, MousePointerClick, ChevronDown } from 'lucide-react';
 import cvFile from '../créa/Beige Noir Moderne Minimaliste CV (5).png';
 import logoMask from '../créa/sperok-mask.png';
 import LoopingVideo from './ui/looping-video';
@@ -55,6 +55,7 @@ export default function ContactPage({ onBack }: ContactPageProps) {
 
   const [activeVideo, setActiveVideo] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [hasSwitched, setHasSwitched] = useState(false); // masque l'indice après le 1er clic
 
   const [nom, setNom] = useState('');
   const [email, setEmail] = useState('');
@@ -65,6 +66,7 @@ export default function ContactPage({ onBack }: ContactPageProps) {
   // Fondu croisé : on ignore les clics pendant les 1000 ms de transition.
   const switchVideo = (i: number) => {
     if (i === activeVideo || isTransitioning) return;
+    setHasSwitched(true);
     setIsTransitioning(true);
     setActiveVideo(i);
     setTimeout(() => setIsTransitioning(false), 1000);
@@ -301,21 +303,35 @@ export default function ContactPage({ onBack }: ContactPageProps) {
         </main>
 
         {/* Sélecteur d'ambiances (vidéos) */}
-        <footer className="flex flex-col gap-4 border-t border-white/15 pt-5 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex flex-wrap gap-x-6 gap-y-2">
-            {VIDEOS.map((v, i) => (
-              <button
-                key={v.label}
-                onClick={() => switchVideo(i)}
-                className={`border-b-2 pb-1 font-mono text-xs uppercase tracking-wider transition-all duration-300 ${
-                  i === activeVideo
-                    ? 'border-[#F5B419] text-[#F5B419]'
-                    : 'border-transparent text-white/55 hover:text-white/90'
-                }`}
-              >
-                {v.label}
-              </button>
-            ))}
+        <footer className="flex flex-col gap-4 border-t border-white/15 pt-5 sm:flex-row sm:items-end sm:justify-between">
+          <div className="flex flex-col gap-2.5">
+            {/* Indice interactif : inviter à changer d'ambiance (disparaît au 1er clic) */}
+            <div
+              className={`flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-[#F5B419] transition-all duration-500 ${
+                hasSwitched ? 'pointer-events-none translate-y-1 opacity-0' : 'opacity-100'
+              }`}
+            >
+              <MousePointerClick className="h-3.5 w-3.5 animate-pulse" />
+              <span>Cliquez pour voyager d'un décor à l'autre</span>
+              <ChevronDown className="h-3.5 w-3.5 animate-bounce" />
+            </div>
+            <div className="flex flex-wrap gap-x-6 gap-y-2">
+              {VIDEOS.map((v, i) => (
+                <button
+                  key={v.label}
+                  onClick={() => switchVideo(i)}
+                  className={`border-b-2 pb-1 font-mono text-xs uppercase tracking-wider transition-all duration-300 ${
+                    i === activeVideo
+                      ? 'border-[#F5B419] text-[#F5B419]'
+                      : `border-transparent text-white/55 hover:text-white/90 ${
+                          hasSwitched ? '' : 'animate-pulse'
+                        }`
+                  }`}
+                >
+                  {v.label}
+                </button>
+              ))}
+            </div>
           </div>
           <span className="font-mono text-[10px] uppercase tracking-widest text-white/60">
             Portfolio · Designer Spéro.K · Bénin

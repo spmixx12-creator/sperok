@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Home, LayoutGrid, ArrowLeft, Monitor, Palette, Share2, Clapperboard, Printer, Film, ChevronRight, X, User, Mail, type LucideIcon } from 'lucide-react';
+import { Home, LayoutGrid, ArrowLeft, Monitor, Palette, Share2, Clapperboard, Printer, Film, ChevronRight, X, User, Mail, MousePointerClick, type LucideIcon } from 'lucide-react';
 import { ContainerScroll } from './ui/container-scroll-animation';
 import { Dock, DockItem, DockIcon, DockLabel } from './ui/dock';
 import { InfiniteMasonry } from './ui/infinite-masonry';
@@ -448,7 +448,7 @@ export default function ProjectsPage({ onBack }: ProjectsPageProps) {
           </span>
         </h2>
 
-        <Dock className="border border-white/10 bg-white/5 backdrop-blur-md">
+        <Dock className="dock-cta border border-white/10 bg-white/5 backdrop-blur-md">
           {DOCK.map((item) => {
             const Icon = item.icon;
             return (
@@ -467,6 +467,13 @@ export default function ProjectsPage({ onBack }: ProjectsPageProps) {
             );
           })}
         </Dock>
+
+        {/* Indice de cliquabilité : beaucoup ne devinaient pas que les icônes
+            sont cliquables (mobile + desktop) → micro-instruction animée. */}
+        <div className="mt-4 flex items-center justify-center gap-2 font-mono text-[9px] uppercase tracking-widest text-amber-400/90 md:text-[10px]">
+          <MousePointerClick className="h-3.5 w-3.5 shrink-0 animate-bounce" />
+          <span>Touchez une icône pour explorer un domaine</span>
+        </div>
 
         {/* Web design & Montage vidéo mis en avant, sur le même écran, juste
             sous le dock (boutons animés → ouvrent la visionneuse). */}

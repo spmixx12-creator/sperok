@@ -38,6 +38,7 @@ import {
   Box,
   Compass,
   PenTool,
+  MousePointerClick,
 } from 'lucide-react';
 
 const skillsTimeline: TimelineItem[] = [
@@ -806,6 +807,21 @@ function HomePage({ onOpenProjects }: HomePageProps) {
               Ma philosophie
             </h2>
 
+            {/* Indice interactif : les mots ambre soulignés ouvrent une bulle
+                montrant mon niveau dans chaque domaine (survol PC / tap mobile). */}
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.6, delay: 0.15 }}
+              className="mt-4 inline-flex items-center gap-2 rounded-full border border-amber-400/30 bg-amber-400/10 px-3.5 py-1.5 font-mono text-[9px] uppercase tracking-widest text-amber-400 backdrop-blur-sm sm:text-[10px]"
+            >
+              <MousePointerClick className="h-3.5 w-3.5 shrink-0 animate-pulse" />
+              <span>
+                Cliquez les mots <span className="text-amber-200">soulignés</span> pour voir mon niveau
+              </span>
+            </motion.div>
+
             <div className="mt-6 space-y-3 text-left font-display text-[0.95rem] leading-relaxed text-neutral-300 md:space-y-4 md:text-base lg:text-lg">
               <p>
                 Je crois qu'un bon design, ça ne se voit pas&nbsp;:{' '}
@@ -814,7 +830,7 @@ function HomePage({ onOpenProjects }: HomePageProps) {
 
               <p>
                 Mon terrain de jeu, c'est l'
-                <LinkPreview content={<SkillMeter label="UI/UX" value={70} />} className="font-bold text-amber-400">
+                <LinkPreview content={<SkillMeter label="UI/UX" value={70} />} className="font-bold text-amber-400 skill-link">
                   UI/UX
                 </LinkPreview>{' '}
                 — cet endroit précis où l'esthétique rencontre l'usage. Je passe autant de temps sur ce qui
@@ -824,7 +840,7 @@ function HomePage({ onOpenProjects }: HomePageProps) {
 
               <p>
                 Côté{' '}
-                <LinkPreview content={<SkillMeter label="Branding" value={80} />} className="font-bold text-amber-400">
+                <LinkPreview content={<SkillMeter label="Branding" value={80} />} className="font-bold text-amber-400 skill-link">
                   branding
                 </LinkPreview>
                 , j'aide les marques à trouver leur voix et leur visage. Pas seulement un logo&nbsp;: une
@@ -834,7 +850,7 @@ function HomePage({ onOpenProjects }: HomePageProps) {
 
               <p>
                 Pour le web, j'avance en{' '}
-                <LinkPreview content={<SkillMeter label="Vibe coding" value={70} />} className="font-bold text-amber-400">
+                <LinkPreview content={<SkillMeter label="Vibe coding" value={70} />} className="font-bold text-amber-400 skill-link">
                   vibe coding
                 </LinkPreview>
                 . Je code à l'instinct&nbsp;: je teste, j'ajuste, et je laisse l'idée guider la technique
@@ -843,7 +859,7 @@ function HomePage({ onOpenProjects }: HomePageProps) {
 
               <p>
                 Et puis il y a le{' '}
-                <LinkPreview content={<SkillMeter label="Motion design" value={30} />} className="font-bold text-amber-400">
+                <LinkPreview content={<SkillMeter label="Motion design" value={30} />} className="font-bold text-amber-400 skill-link">
                   motion design
                 </LinkPreview>
                 , ma petite touche de magie. Ce moment où une idée statique se met à bouger, à raconter, à
