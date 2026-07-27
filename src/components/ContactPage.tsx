@@ -89,7 +89,7 @@ export default function ContactPage({ onBack }: ContactPageProps) {
   };
 
   const field =
-    'w-full rounded-xl border border-white/20 bg-white/[0.07] px-4 py-2.5 font-sans text-sm text-white outline-none transition-colors placeholder:text-white/60 focus:border-[#F5B419]/70 focus:bg-white/[0.12] sm:py-3';
+    'w-full rounded-xl border border-white/20 bg-white/[0.08] px-4 py-2.5 font-sans text-sm text-white outline-none backdrop-blur-md transition-colors placeholder:text-white/60 focus:border-[#F5B419]/70 focus:bg-white/[0.14] sm:py-3';
 
 
   return (
@@ -158,11 +158,14 @@ export default function ContactPage({ onBack }: ContactPageProps) {
         {/* Formulaire seul, bien centré dans la vitre du wagon (« Dites salut »
             et les coordonnées sont descendus dans la console du bas). */}
         <main className="flex min-h-0 flex-1 overflow-y-auto py-2 [scrollbar-width:none] lg:py-8">
+          {/* Le formulaire EST la vitre centrale du wagon : pas de carte, pas de
+              bordure ni de fond — les champs sont « écrits » directement sur la
+              vitre, et l'ensemble remplit la fenêtre centrale. */}
           <form
             onSubmit={handleSubmit}
-            className="liquid-glass m-auto flex w-full max-w-lg flex-col gap-2.5 rounded-2xl p-4 sm:gap-3.5 sm:rounded-3xl sm:p-6 md:p-8"
+            className="m-auto flex w-full max-w-3xl flex-col gap-3 sm:gap-4"
           >
-            <h2 className="font-display text-xl font-black uppercase tracking-tight text-white sm:text-2xl md:text-3xl">
+            <h2 className="font-display text-2xl font-black uppercase tracking-tight text-white sm:text-3xl md:text-4xl">
               Écrivez-moi
             </h2>
             <input
