@@ -213,9 +213,13 @@ export default function ProjectsPage({ onBack }: ProjectsPageProps) {
           requestAnimationFrame(() => window.scrollTo({ top: 0 }));
         }}
         aria-label="spérok — retour à l'accueil"
-        className="fixed top-5 left-6 z-50 block h-7 w-24 md:h-8 md:w-28 cursor-pointer select-none"
+        // z au-dessus du hub/footer (z-10000) pour rester visible, mais sous la
+        // visionneuse (z-100000). `mix-blend-difference` + remplissage blanc =
+        // le logo s'inverse selon le fond (sombre -> blanc, clair -> noir).
+        className="fixed top-5 left-6 z-[10060] block h-7 w-24 md:h-8 md:w-28 cursor-pointer select-none"
         style={{
-          backgroundColor: '#111111',
+          backgroundColor: '#ffffff',
+          mixBlendMode: 'difference',
           WebkitMaskImage: `url(${logoMask})`,
           maskImage: `url(${logoMask})`,
           WebkitMaskRepeat: 'no-repeat',

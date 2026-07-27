@@ -91,7 +91,6 @@ export default function ContactPage({ onBack }: ContactPageProps) {
   const field =
     'w-full rounded-xl border border-white/20 bg-white/[0.07] px-4 py-2.5 font-sans text-sm text-white outline-none transition-colors placeholder:text-white/60 focus:border-[#F5B419]/70 focus:bg-white/[0.12] sm:py-3';
 
-  const label = 'block font-mono text-[10px] uppercase tracking-widest text-[#F5B419]';
 
   return (
     <section className="relative h-[100svh] w-full overflow-hidden bg-[#191514] font-sans selection:bg-[#F5B419] selection:text-[#191514] lg:h-auto lg:min-h-screen">
@@ -156,90 +155,12 @@ export default function ContactPage({ onBack }: ContactPageProps) {
           </button>
         </nav>
 
-        {/* Hero + formulaire — regroupés au centre, dans la vitre du wagon.
-            Mobile : hauteur d'écran fixe ; le bloc central se centre et ne
-            déborde pas (repli sur un léger défilement interne uniquement sur
-            très petits écrans), pour garder le wagon et le fond toujours vus. */}
-        <main className="flex min-h-0 flex-1 overflow-y-auto py-2 [scrollbar-width:none] lg:overflow-visible lg:py-8">
-          <div className="m-auto grid w-full max-w-4xl grid-cols-1 gap-3 lg:grid-cols-2 lg:gap-6">
-          {/* Colonne gauche : accroche + coordonnées (carte opaque) */}
-          <div className="liquid-glass flex flex-col rounded-2xl p-4 sm:rounded-3xl sm:p-6 md:p-8">
-            <span
-              className="inline-flex w-fit items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 font-mono text-[10px] uppercase tracking-widest text-white"
-            >
-              <span className="h-2 w-2 animate-pulse rounded-full" style={{ backgroundColor: ACCENT }} />
-              Disponible pour vos projets
-            </span>
-
-            <h1 className="mt-3 font-display text-3xl font-black uppercase leading-[0.95] tracking-tight text-white sm:mt-5 sm:text-5xl lg:text-6xl">
-              Dites <span style={{ color: ACCENT }}>salut.</span>
-            </h1>
-
-            <p className="mt-4 hidden max-w-md font-sans text-sm leading-relaxed text-white/85 sm:mt-6 sm:block sm:text-base">
-              Vous avez une idée, un projet, ou juste envie de discuter design ?
-              Je suis à un message de distance.
-            </p>
-
-            {/* Coordonnées */}
-            <div className="mt-4 flex flex-col gap-2.5 sm:mt-8 sm:gap-3">
-              <a
-                href={`mailto:${EMAIL}`}
-                className="group flex items-center gap-3.5 rounded-2xl border border-white/10 bg-white/[0.06] px-3.5 py-2.5 transition-colors hover:bg-white/[0.1] sm:px-4 sm:py-3"
-              >
-                <span
-                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
-                  style={{ backgroundColor: `${ACCENT}26` }}
-                >
-                  <Mail className="h-4 w-4" style={{ color: ACCENT }} />
-                </span>
-                <span className="min-w-0">
-                  <span className={label}>Email</span>
-                  <span className="block truncate font-display text-sm font-semibold text-white">{EMAIL}</span>
-                </span>
-              </a>
-
-              <div className="flex flex-col gap-3 sm:flex-row">
-                <a
-                  href="https://wa.me/2290143202240"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="group flex flex-1 items-center gap-3.5 rounded-2xl border border-white/10 bg-white/[0.06] px-3.5 py-2.5 transition-colors hover:bg-white/[0.1] sm:px-4 sm:py-3"
-                >
-                  <span
-                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
-                    style={{ backgroundColor: `${ACCENT}26` }}
-                  >
-                    <MessageCircle className="h-4 w-4" style={{ color: ACCENT }} />
-                  </span>
-                  <span className="min-w-0">
-                    <span className={label}>Whatsapp</span>
-                    <span className="block font-display text-sm font-semibold text-white">+229 01 43 20 22 40</span>
-                  </span>
-                </a>
-
-                <a
-                  href="tel:+2290153305895"
-                  className="group flex flex-1 items-center gap-3.5 rounded-2xl border border-white/10 bg-white/[0.06] px-3.5 py-2.5 transition-colors hover:bg-white/[0.1] sm:px-4 sm:py-3"
-                >
-                  <span
-                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
-                    style={{ backgroundColor: `${ACCENT}26` }}
-                  >
-                    <Phone className="h-4 w-4" style={{ color: ACCENT }} />
-                  </span>
-                  <span className="min-w-0">
-                    <span className={label}>Contact</span>
-                    <span className="block font-display text-sm font-semibold text-white">+229 01 53 30 58 95</span>
-                  </span>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          {/* Colonne droite : formulaire en liquid glass */}
+        {/* Formulaire seul, bien centré dans la vitre du wagon (« Dites salut »
+            et les coordonnées sont descendus dans la console du bas). */}
+        <main className="flex min-h-0 flex-1 overflow-y-auto py-2 [scrollbar-width:none] lg:py-8">
           <form
             onSubmit={handleSubmit}
-            className="liquid-glass flex w-full flex-col gap-2.5 rounded-2xl p-4 sm:gap-3.5 sm:rounded-3xl sm:p-6 md:p-8"
+            className="liquid-glass m-auto flex w-full max-w-lg flex-col gap-2.5 rounded-2xl p-4 sm:gap-3.5 sm:rounded-3xl sm:p-6 md:p-8"
           >
             <h2 className="font-display text-xl font-black uppercase tracking-tight text-white sm:text-2xl md:text-3xl">
               Écrivez-moi
@@ -304,43 +225,86 @@ export default function ContactPage({ onBack }: ContactPageProps) {
               </a>
             </div>
           </form>
-          </div>
         </main>
 
-        {/* Sélecteur d'ambiances (vidéos) */}
-        <footer className="flex flex-col gap-3 border-t border-white/15 pt-3 sm:flex-row sm:items-end sm:justify-between sm:gap-4 sm:pt-5">
-          <div className="flex flex-col gap-2.5">
-            {/* Indice interactif : inviter à changer d'ambiance (disparaît au 1er clic) */}
-            <div
-              className={`flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-[#F5B419] transition-all duration-500 ${
-                hasSwitched ? 'pointer-events-none translate-y-1 opacity-0' : 'opacity-100'
-              }`}
-            >
-              <MousePointerClick className="h-3.5 w-3.5 animate-pulse" />
-              <span>Cliquez pour voyager d'un décor à l'autre</span>
-              <ChevronDown className="h-3.5 w-3.5 animate-bounce" />
+        {/* ── Bas (console du wagon) : « Dites salut » + coordonnées, puis les
+            ambiances juste en dessous. ── */}
+        <footer className="flex flex-col gap-3 border-t border-white/15 pt-3 sm:gap-4 sm:pt-4">
+          {/* Accroche + coordonnées */}
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 font-mono text-[9px] uppercase tracking-widest text-white sm:text-[10px]">
+                <span className="h-1.5 w-1.5 animate-pulse rounded-full" style={{ backgroundColor: ACCENT }} />
+                Disponible
+              </span>
+              <h1 className="font-display text-2xl font-black uppercase leading-none tracking-tight text-white sm:text-3xl">
+                Dites <span style={{ color: ACCENT }}>salut.</span>
+              </h1>
             </div>
-            <div className="flex flex-wrap gap-x-6 gap-y-2">
-              {VIDEOS.map((v, i) => (
-                <button
-                  key={v.label}
-                  onClick={() => switchVideo(i)}
-                  className={`border-b-2 pb-1 font-mono text-xs uppercase tracking-wider transition-all duration-300 ${
-                    i === activeVideo
-                      ? 'border-[#F5B419] text-[#F5B419]'
-                      : `border-transparent text-white/55 hover:text-white/90 ${
-                          hasSwitched ? '' : 'animate-pulse'
-                        }`
-                  }`}
-                >
-                  {v.label}
-                </button>
-              ))}
+
+            {/* Coordonnées compactes (icônes seules sur mobile, + texte dès sm) */}
+            <div className="flex flex-wrap items-center gap-2">
+              <a
+                href={`mailto:${EMAIL}`}
+                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-2.5 py-2 transition-colors hover:bg-white/[0.1] sm:px-3 sm:py-1.5"
+              >
+                <Mail className="h-4 w-4 shrink-0" style={{ color: ACCENT }} />
+                <span className="hidden font-display text-xs font-semibold text-white sm:inline">{EMAIL}</span>
+              </a>
+              <a
+                href="https://wa.me/2290143202240"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-2.5 py-2 transition-colors hover:bg-white/[0.1] sm:px-3 sm:py-1.5"
+              >
+                <MessageCircle className="h-4 w-4 shrink-0" style={{ color: ACCENT }} />
+                <span className="hidden font-display text-xs font-semibold text-white sm:inline">+229 01 43 20 22 40</span>
+              </a>
+              <a
+                href="tel:+2290153305895"
+                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-2.5 py-2 transition-colors hover:bg-white/[0.1] sm:px-3 sm:py-1.5"
+              >
+                <Phone className="h-4 w-4 shrink-0" style={{ color: ACCENT }} />
+                <span className="hidden font-display text-xs font-semibold text-white sm:inline">+229 01 53 30 58 95</span>
+              </a>
             </div>
           </div>
-          <span className="hidden font-mono text-[10px] uppercase tracking-widest text-white/60 sm:block">
-            Portfolio · Designer Spéro.K · Bénin
-          </span>
+
+          {/* Ambiances (options) — juste sous « Dites salut » */}
+          <div className="flex flex-col gap-2 border-t border-white/10 pt-3 sm:flex-row sm:items-end sm:justify-between">
+            <div className="flex flex-col gap-2">
+              {/* Indice interactif : inviter à changer d'ambiance (disparaît au 1er clic) */}
+              <div
+                className={`flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-[#F5B419] transition-all duration-500 ${
+                  hasSwitched ? 'pointer-events-none translate-y-1 opacity-0' : 'opacity-100'
+                }`}
+              >
+                <MousePointerClick className="h-3.5 w-3.5 animate-pulse" />
+                <span>Cliquez pour voyager d'un décor à l'autre</span>
+                <ChevronDown className="h-3.5 w-3.5 animate-bounce" />
+              </div>
+              <div className="flex flex-wrap gap-x-6 gap-y-2">
+                {VIDEOS.map((v, i) => (
+                  <button
+                    key={v.label}
+                    onClick={() => switchVideo(i)}
+                    className={`border-b-2 pb-1 font-mono text-xs uppercase tracking-wider transition-all duration-300 ${
+                      i === activeVideo
+                        ? 'border-[#F5B419] text-[#F5B419]'
+                        : `border-transparent text-white/55 hover:text-white/90 ${
+                            hasSwitched ? '' : 'animate-pulse'
+                          }`
+                    }`}
+                  >
+                    {v.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <span className="hidden font-mono text-[10px] uppercase tracking-widest text-white/60 sm:block">
+              Portfolio · Designer Spéro.K · Bénin
+            </span>
+          </div>
         </footer>
       </div>
     </section>
