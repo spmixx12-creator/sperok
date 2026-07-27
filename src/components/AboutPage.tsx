@@ -464,7 +464,7 @@ export default function AboutPage({ onBack }: AboutPageProps) {
       <button
         onClick={onBack}
         title="Retour à l'accueil"
-        className="hidden lg:flex fixed top-5 right-6 z-[60] items-center gap-2 px-4 py-2.5 bg-[#F5B419] text-[#191514] font-display font-bold text-xs uppercase tracking-wider rounded-full border border-[#F5B419] shadow-lg shadow-[#F5B419]/25 hover:bg-[#F5B419]/90 transition-all active:scale-95 cursor-pointer"
+        className="fixed top-5 right-6 z-[60] flex items-center gap-2 px-4 py-2.5 bg-[#F5B419] text-[#191514] font-display font-bold text-xs uppercase tracking-wider rounded-full border border-[#F5B419] shadow-lg shadow-[#F5B419]/25 hover:bg-[#F5B419]/90 transition-all active:scale-95 cursor-pointer"
       >
         <ArrowLeft className="w-4 h-4" />
         <span>Retour</span>
@@ -493,7 +493,7 @@ export default function AboutPage({ onBack }: AboutPageProps) {
 
         {/* Photo de Spéro détourée qui chevauche le nom géant */}
         <div className="absolute inset-0 z-10 flex items-end justify-center pointer-events-none select-none pb-4">
-          <div className="h-[55vh] md:h-[65vh] lg:h-[70vh] w-auto">
+          <div className="h-[64vh] md:h-[65vh] lg:h-[70vh] w-auto">
             <img 
               src={cvCutout} 
               alt="Spéro Kouton" 
@@ -522,22 +522,6 @@ export default function AboutPage({ onBack }: AboutPageProps) {
               Appliqué <br />
               Différemment.
             </h1>
-
-            <div className="flex gap-4 mt-8">
-              <button 
-                onClick={handleOpenCalendly}
-                className="px-6 py-3.5 bg-[#F5B419] text-[#191514] font-display font-bold text-xs uppercase tracking-wider rounded-xl border border-[#F5B419] hover:bg-[#F5B419]/90 transition-all flex items-center gap-2 cursor-pointer shadow-sm shadow-[#F5B419]/25 active:scale-95"
-              >
-                <CalendarCheck className="w-4 h-4" />
-                <span>Réserver un appel</span>
-              </button>
-              <button 
-                onClick={() => handleScrollToId('about-intro')}
-                className="px-6 py-3.5 bg-white/40 text-[#191514] font-display font-bold text-xs uppercase tracking-wider rounded-xl border border-neutral-300 hover:bg-white/80 transition-all cursor-pointer active:scale-95"
-              >
-                <span>À propos de moi</span>
-              </button>
-            </div>
           </div>
 
           {/* Droite : Qualificatifs, Paragraphe & Signature */}
@@ -550,11 +534,6 @@ export default function AboutPage({ onBack }: AboutPageProps) {
               <li className="flex items-center gap-2 lg:flex-row-reverse"><Hammer className="w-3.5 h-3.5 text-[#F5B419]" /> <span>Bâtisseur</span></li>
               <li className="flex items-center gap-2 lg:flex-row-reverse"><Rocket className="w-3.5 h-3.5 text-[#F5B419]" /> <span>Efficace</span></li>
             </ul>
-
-            {/* Paragraphe explicatif */}
-            <p className="max-w-xs text-neutral-600 text-xs md:text-sm leading-relaxed">
-              J'accompagne les marques de la conception à la concrétisation. Mon objectif : allier beauté structurelle et identité forte pour marquer les esprits.
-            </p>
 
             {/* Signature */}
             <div className="font-mono text-[9px] uppercase tracking-widest text-[#F5B419] font-bold bg-[#191514] text-white px-3 py-1.5 rounded">
@@ -816,29 +795,8 @@ export default function AboutPage({ onBack }: AboutPageProps) {
           </div>
 
 
-          {/* ========================================== */}
-          {/* BOUTON RETOUR MOBILES                       */}
-          {/* ========================================== */}
-          <div className="lg:hidden px-6 mt-12 w-full">
-            <button 
-              onClick={onBack}
-              className="w-full py-4 bg-white text-[#191514] font-display font-bold text-xs uppercase tracking-wider border border-neutral-300 rounded-xl flex items-center justify-center gap-2 cursor-pointer"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              <span>Retour à l'accueil</span>
-            </button>
-          </div>
         </main>
       </div>
-
-      {/* Bouton retour collant en bas à droite (Écrans mobiles/tablettes uniquement) */}
-      <button 
-        onClick={onBack}
-        className="lg:hidden fixed bottom-6 left-6 z-[60] w-12 h-12 bg-[#F5B419] text-[#191514] rounded-full flex items-center justify-center shadow-lg cursor-pointer border border-[#F5B419] active:scale-95"
-        title="Retour à l'accueil"
-      >
-        <ArrowLeft className="w-5 h-5" />
-      </button>
 
       {/* Modal Calendly */}
       <AnimatePresence>

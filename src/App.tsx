@@ -329,6 +329,19 @@ function HomePage({ onOpenProjects }: HomePageProps) {
     io.observe(el);
     return () => io.disconnect();
   }, []);
+  // Vrai quand le footer est à l'écran → on masque complètement le bouton de
+  // navigation (il ne doit jamais apparaître par-dessus le footer).
+  const [footerVisible, setFooterVisible] = useState(false);
+  useEffect(() => {
+    const el = document.getElementById('footer');
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => setFooterVisible(entry.isIntersecting),
+      { threshold: 0.01 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
   // Ouvre le modal de réservation Calendly (intégré au site).
   const [showCalendly, setShowCalendly] = useState(false);
   const [scrambleCode, setScrambleCode] = useState(true);
@@ -532,6 +545,7 @@ function HomePage({ onOpenProjects }: HomePageProps) {
           options adaptées aux sections de la page principale) */}
       <FloatingActionMenu
         position={atLastSection ? 'top' : 'bottom'}
+        hidden={footerVisible}
         options={[
           {
             label: 'Home',

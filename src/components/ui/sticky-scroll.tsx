@@ -73,7 +73,7 @@ function Signature() {
 
   return (
     <footer ref={ref} className="group bg-neutral-950">
-      <h2 className="translate-y-16 text-center text-[16vw] font-black uppercase leading-[100%] tracking-tighter">
+      <h2 className="translate-y-4 text-center text-[16vw] font-black uppercase leading-[100%] tracking-tighter lg:translate-y-16">
         <span className={GRADIENT_TEXT}>Spér</span>
         {/* La lettre "O" sert de scène à la mascotte */}
         <span className="relative inline-block align-baseline">
@@ -249,9 +249,9 @@ const StickyScrollGallery = forwardRef<HTMLElement, StickyScrollGalleryProps>(
                 <span className="relative inline-block select-none px-1">
                   <span className="text-neutral-500">Un aperçu</span>
                   <motion.span
+                    key={drawKey}
                     initial={{ width: '0%' }}
-                    whileInView={{ width: '100%' }}
-                    viewport={{ once: true, margin: '-80px' }}
+                    animate={{ width: '100%' }}
                     transition={{ delay: 0.2, duration: 1.2, ease: [0.25, 1, 0.5, 1] }}
                     className="absolute inset-y-0 left-0 overflow-hidden whitespace-nowrap bg-amber-400"
                   >

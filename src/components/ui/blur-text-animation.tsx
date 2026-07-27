@@ -79,7 +79,7 @@ export function Component({
   return (
     <div
       className={[
-        "relative flex w-full flex-col items-center justify-center overflow-hidden px-6 pt-4 pb-20 md:pt-5 md:pb-24",
+        "relative flex w-full flex-col items-center justify-center overflow-hidden px-6 pt-1 pb-20 md:pt-4 md:pb-24",
         className,
       ]
         .filter(Boolean)
@@ -93,7 +93,7 @@ export function Component({
             whileInView={{ opacity: 1, filter: "blur(0px)", y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7, ease: [0.25, 1, 0.5, 1] }}
-            className="mb-8 inline-block rounded border border-amber-200/30 bg-amber-50 px-2.5 py-1 font-mono text-[9px] uppercase tracking-widest text-amber-600"
+            className="mb-5 md:mb-8 inline-block rounded border border-amber-200/30 bg-amber-50 px-2.5 py-1 font-mono text-[9px] uppercase tracking-widest text-amber-600"
           >
             {eyebrow}
           </motion.span>
