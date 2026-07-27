@@ -14,7 +14,11 @@ interface CountUpProps {
 
 export default function CountUp({ to, duration = 1.4, className }: CountUpProps) {
   const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
+  // Marge VERTICALE uniquement (« -80px 0px ») : un « -80px » sur tous les côtés
+  // rétrécit aussi la zone horizontale et, sur un téléphone étroit, le petit
+  // nombre de la colonne de droite (ex. « +10 ») tombe hors zone → le compteur
+  // restait bloqué à 0. En limitant au vertical, il se déclenche partout.
+  const inView = useInView(ref, { once: true, margin: "-80px 0px" });
   const [value, setValue] = useState(0);
 
   useEffect(() => {
