@@ -31,7 +31,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 // Imports d'images locales
 import cvCutout from '../créa/Beige Noir Moderne Minimaliste CV (5).png';
-import cvPdf from '../Apperçu/Mon CV Designer.pdf';
+import { CV_DOWNLOAD_NAME, CV_FILE } from '../assets/cv';
 import profilePortrait from '../créa/WhatsApp Image 2026-06-25 at 22.33.55.jpeg';
 import gamplaySite from '../créa/gamplay-site.png';
 import vintageSite from '../créa/vintage-site.png';
@@ -526,8 +526,8 @@ export default function AboutPage({ onBack }: AboutPageProps) {
             </h1>
 
             <a
-              href={cvPdf}
-              download="CV-Spero-Kouton.pdf"
+              href={CV_FILE}
+              download={CV_DOWNLOAD_NAME}
               className="mt-8 inline-flex items-center gap-2 px-6 py-3.5 bg-[#F5B419] text-[#191514] font-display font-bold text-xs uppercase tracking-wider rounded-xl border border-[#F5B419] hover:bg-[#F5B419]/90 transition-all cursor-pointer shadow-sm shadow-[#F5B419]/25 active:scale-95"
             >
               <Download className="w-4 h-4" />

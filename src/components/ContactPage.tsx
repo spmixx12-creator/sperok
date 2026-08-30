@@ -12,7 +12,7 @@
 // Le formulaire ouvre WhatsApp pré-rempli. Téléchargement du CV.
 import { useLayoutEffect, useState } from 'react';
 import { ArrowLeft, Mail, MessageCircle, Phone, Download, Send, MousePointerClick, ChevronDown } from 'lucide-react';
-import cvFile from '../Apperçu/Mon CV Designer.pdf';
+import { CV_DOWNLOAD_NAME, CV_FILE } from '../assets/cv';
 import logoMask from '../créa/sperok-mask.png';
 import LoopingVideo from './ui/looping-video';
 
@@ -219,8 +219,8 @@ export default function ContactPage({ onBack }: ContactPageProps) {
                 <span>Envoyer le message</span>
               </button>
               <a
-                href={cvFile}
-                download="CV-Spero-Kouton.pdf"
+                href={CV_FILE}
+                download={CV_DOWNLOAD_NAME}
                 className="flex items-center justify-center gap-2 rounded-xl border border-white/25 bg-white/5 px-4 py-3 font-display text-xs font-bold uppercase tracking-wider sm:px-6 sm:py-3.5 text-white backdrop-blur-md transition-colors hover:border-[#F5B419]/60 hover:text-[#F5B419]"
               >
                 <Download className="h-4 w-4" />

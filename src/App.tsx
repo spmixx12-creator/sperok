@@ -25,7 +25,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollToPlugin, ScrollTrigger);
 import mapBg from './créa/tribute-boomerang.mp4';
 import philoBg from './créa/telechargement28-boomerang.mp4';
-import cvCutout from './créa/Beige Noir Moderne Minimaliste CV (5).png';
 import RadialOrbitalTimeline, { type TimelineItem } from './components/ui/radial-orbital-timeline';
 import { LinkPreview } from './components/ui/link-preview';
 import { TextScramble } from './components/ui/text-scramble';
