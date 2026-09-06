@@ -30,12 +30,12 @@ import Logo from './Logo';
 gsap.registerPlugin(ScrollTrigger);
 
 // Imports d'images locales
-import cvCutout from '../créa/Beige Noir Moderne Minimaliste CV (5).png';
+import cvCutout from '../créa/Beige Noir Moderne Minimaliste CV (5).webp';
 import { CV_DOWNLOAD_NAME, CV_FILE } from '../assets/cv';
 import profilePortrait from '../créa/WhatsApp Image 2026-06-25 at 22.33.55.jpeg';
-import gamplaySite from '../créa/gamplay-site.png';
-import vintageSite from '../créa/vintage-site.png';
-import snakiSite from '../créa/snaki-site.png';
+import gamplaySite from '../créa/gamplay-site.webp';
+import vintageSite from '../créa/vintage-site.webp';
+import snakiSite from '../créa/snaki-site.webp';
 
 interface AboutPageProps {
   onBack: () => void;

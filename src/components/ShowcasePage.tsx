@@ -17,9 +17,9 @@ import {
 } from 'react';
 import { motion, useScroll, useTransform, type MotionValue } from 'motion/react';
 import { ArrowLeft, ArrowUpRight } from 'lucide-react';
-import gamplaySite from '../créa/gamplay-site.png';
-import vintageSite from '../créa/vintage-site.png';
-import snakiSite from '../créa/snaki-site.png';
+import gamplaySite from '../créa/gamplay-site.webp';
+import vintageSite from '../créa/vintage-site.webp';
+import snakiSite from '../créa/snaki-site.webp';
 
 const ACCENT = '#F5B419';
 

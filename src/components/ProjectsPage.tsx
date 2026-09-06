@@ -11,7 +11,7 @@ import { MarqueeAnimation } from './ui/marquee-effect';
 import FloatingActionMenu from './ui/floating-action-menu';
 import Lenis from 'lenis';
 import logoMask from '../créa/sperok-mask.png';
-import apercuVideo from '../créa/apercu-travaux-web.mp4';
+import apercuVideo from '../créa/apercu-travaux-web.opt.mp4';
 
 interface ProjectsPageProps {
   onBack: () => void;

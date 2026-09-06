@@ -20,7 +20,7 @@ const SOCIAL_MODULES = import.meta.glob(
   "../../Apperçu/Social Media/*.{png,jpg,jpeg,webp}",
   { eager: true, import: "default" },
 );
-const WEB_MODULES = import.meta.glob("../../créa/*-site.png", {
+const WEB_MODULES = import.meta.glob("../../créa/*-site.webp", {
   eager: true,
   import: "default",
 });

@@ -6,6 +6,23 @@ import {defineConfig} from 'vite';
 export default defineConfig(() => {
   return {
     plugins: [react(), tailwindcss()],
+    build: {
+      // Découpe les grosses libs en chunks séparés : téléchargement parallèle
+      // et surtout mise en cache navigateur (elles changent rarement) → l'appli
+      // ne re-télécharge que son propre code entre deux visites.
+      chunkSizeWarningLimit: 900,
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (!id.includes('node_modules')) return;
+            if (id.includes('three') || id.includes('@react-three') || id.includes('cobe')) return 'three';
+            if (id.includes('gsap')) return 'gsap';
+            if (id.includes('/motion/') || id.includes('framer-motion')) return 'motion';
+            if (id.includes('/react/') || id.includes('/react-dom/') || id.includes('/scheduler/')) return 'react-vendor';
+          },
+        },
+      },
+    },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),

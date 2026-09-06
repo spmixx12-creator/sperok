@@ -14,9 +14,9 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { CalendarCheck, Zap, Shield, Target, Hammer, Rocket } from "lucide-react";
 
-import heroPhoto from "../../créa/spero-cutout.png";
+import heroPhoto from "../../créa/spero-cutout.webp";
 import logoMask from "../../créa/sperok-mask.png";
-import bgBoomerang from "../../créa/parallax-bg-boomerang.mp4";
+import bgBoomerang from "../../créa/parallax-bg-boomerang.opt.mp4";
 
 gsap.registerPlugin(ScrollTrigger);
 

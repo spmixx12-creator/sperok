@@ -23,9 +23,9 @@ import {
 } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
 import { ArrowUpRight } from 'lucide-react';
-import gamplaySite from '../../créa/gamplay-site.png';
-import vintageSite from '../../créa/vintage-site.png';
-import snakiSite from '../../créa/snaki-site.png';
+import gamplaySite from '../../créa/gamplay-site.webp';
+import vintageSite from '../../créa/vintage-site.webp';
+import snakiSite from '../../créa/snaki-site.webp';
 
 const ACCENT = '#feb804'; // ambre de la DA (remplace le vert acide de la réf)
 const DOMAIN = 'sperokouton.com'; // domaine fictif affiché dans la barre d'URL

@@ -64,7 +64,7 @@ export default function LoopingVideo({ src, active, className = '', fade = 1 }: 
         src={src}
         muted
         playsInline
-        preload="auto"
+        preload={active ? 'auto' : 'none'}
         onTimeUpdate={() => handleTime('a')}
         className={`${base} ${front === 'a' ? 'opacity-100' : 'opacity-0'}`}
         style={dur}
@@ -74,7 +74,7 @@ export default function LoopingVideo({ src, active, className = '', fade = 1 }: 
         src={src}
         muted
         playsInline
-        preload="auto"
+        preload={active ? 'auto' : 'none'}
         onTimeUpdate={() => handleTime('b')}
         className={`${base} ${front === 'b' ? 'opacity-100' : 'opacity-0'}`}
         style={dur}

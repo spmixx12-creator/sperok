@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
 import { Sticker, ChatMessage } from './types';
-import ProjectsPage from './components/ProjectsPage';
-import AboutPage from './components/AboutPage';
-import ShowcasePage from './components/ShowcasePage';
-import ContactPage from './components/ContactPage';
+// Sous-pages chargées à la demande (code-splitting) : elles ne pèsent plus sur
+// le chargement initial de l'accueil.
+const ProjectsPage = lazy(() => import('./components/ProjectsPage'));
+const AboutPage = lazy(() => import('./components/AboutPage'));
+const ShowcasePage = lazy(() => import('./components/ShowcasePage'));
+const ContactPage = lazy(() => import('./components/ContactPage'));
 import { BlurFade } from './components/ui/blur-fade';
 import { MagicText } from './components/ui/magic-text';
 import { VideoScrollHero } from './components/ui/video-scroll-hero';
@@ -15,7 +17,11 @@ import CountUp from './components/ui/count-up';
 import FloatingActionMenu from './components/ui/floating-action-menu';
 import { RevealImageList } from './components/ui/reveal-images';
 import { BackgroundBeamsWithCollision } from './components/ui/background-beams-with-collision';
-import { ScrollModel3D } from './components/ui/scroll-model';
+// Modèle 3D (three.js) chargé à la demande : sort three.js (~260 Ko gzip) du
+// chemin critique de l'accueil — la page s'affiche sans l'attendre.
+const ScrollModel3D = lazy(() =>
+  import('./components/ui/scroll-model').then((m) => ({ default: m.ScrollModel3D })),
+);
 import { ParallaxHero } from './components/ui/parallax-scrolling';
 import { Component as Footer } from './components/ui/footer-taped-design';
 import { gsap } from 'gsap';
@@ -680,7 +686,9 @@ function HomePage({ onOpenProjects }: HomePageProps) {
         >
           <BackgroundBeamsWithCollision className="min-h-[80vh] flex-col text-center py-20 px-6">
             {/* Modèle 3D (scene.glb) qui traverse la section de gauche à droite au scroll */}
-            <ScrollModel3D />
+            <Suspense fallback={null}>
+              <ScrollModel3D />
+            </Suspense>
 
             <span className="relative z-20 mb-12 font-mono text-[10px] tracking-widest uppercase font-bold text-[#F5B419] bg-neutral-900 px-2.5 py-1 rounded">
               QUELQUES-UNS DE MES SERVICES
@@ -924,6 +932,13 @@ const WEBDESIGN_HASH = '#/web-design';
 const MONTAGE_HASH = '#/montage-video';
 const CONTACT_HASH = '#/contact';
 
+// Écran d'attente pendant le chargement à la demande d'une sous-page.
+const RouteFallback = () => (
+  <div className="flex min-h-screen w-full items-center justify-center bg-[#FAF7F2]">
+    <div className="h-8 w-8 animate-spin rounded-full border-2 border-neutral-300 border-t-[#F5B419]" />
+  </div>
+);
+
 export default function App() {
   const [route, setRoute] = useState(() => window.location.hash);
 
@@ -941,29 +956,41 @@ export default function App() {
   };
 
   if (route === ABOUT_HASH_EN || route === ABOUT_HASH_FR) {
-    return <AboutPage onBack={goBack} />;
+    return (
+      <Suspense fallback={<RouteFallback />}>
+        <AboutPage onBack={goBack} />
+      </Suspense>
+    );
   }
 
   if (route === CONTACT_HASH) {
-    return <ContactPage onBack={goBack} />;
+    return (
+      <Suspense fallback={<RouteFallback />}>
+        <ContactPage onBack={goBack} />
+      </Suspense>
+    );
   }
 
   if (route === WEBDESIGN_HASH || route === MONTAGE_HASH) {
     return (
-      <ShowcasePage
-        kind={route === MONTAGE_HASH ? 'montage-video' : 'web-design'}
-        onBack={goBack}
-      />
+      <Suspense fallback={<RouteFallback />}>
+        <ShowcasePage
+          kind={route === MONTAGE_HASH ? 'montage-video' : 'web-design'}
+          onBack={goBack}
+        />
+      </Suspense>
     );
   }
 
   if (route === PROJECTS_HASH) {
     return (
-      <ProjectsPage
-        onBack={() => {
-          window.location.hash = '';
-        }}
-      />
+      <Suspense fallback={<RouteFallback />}>
+        <ProjectsPage
+          onBack={() => {
+            window.location.hash = '';
+          }}
+        />
+      </Suspense>
     );
   }
 
