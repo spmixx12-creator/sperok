@@ -201,6 +201,24 @@ const StickyScrollGallery = forwardRef<HTMLElement, StickyScrollGalleryProps>(
       return () => clearInterval(interval);
     }, []);
 
+    // Préchargement des images de la galerie dès que le panneau d'intro approche
+    // (l'intro reste épinglée ~un écran avant que la galerie ne défile) : les
+    // visuels sont donc déjà en cache quand on y arrive → plus d'attente/pop-in.
+    const introRef = useRef<HTMLDivElement>(null);
+    const preloadedRef = useRef(false);
+    const introInView = useInView(introRef, { once: true, margin: '600px 0px' });
+    useEffect(() => {
+      if (!introInView || preloadedRef.current) return;
+      preloadedRef.current = true;
+      APERCU_IMAGES.forEach((src) => {
+        if (src) {
+          const img = new Image();
+          img.decoding = 'async';
+          img.src = src;
+        }
+      });
+    }, [introInView]);
+
     // Pan vertical (haut → bas) de l'image "VINTAGE VOUS REGALE" tout au long
     // du défilement de la galerie.
     const galleryRef = useRef<HTMLDivElement>(null);
@@ -236,7 +254,7 @@ const StickyScrollGallery = forwardRef<HTMLElement, StickyScrollGalleryProps>(
       <section id={id} ref={ref} className="relative bg-neutral-950 text-white">
         {/* Panneau d'intro épinglé pendant un écran, puis la galerie défile par-dessus */}
         <div className="wrapper">
-          <div className="sticky top-0 grid h-screen w-full place-content-center overflow-hidden bg-neutral-950">
+          <div ref={introRef} className="sticky top-0 grid h-screen w-full place-content-center overflow-hidden bg-neutral-950">
             {/* Grille décorative en fondu (cohérente avec le reste du site) */}
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:54px_54px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
 
@@ -309,6 +327,7 @@ const StickyScrollGallery = forwardRef<HTMLElement, StickyScrollGalleryProps>(
                       src={src}
                       alt="The Bal — ticket d'entrée"
                       loading="lazy"
+                      decoding="async"
                       style={{ objectPosition: balObjectPosition }}
                       className={`${shape.height} w-full object-cover align-bottom transition-transform duration-700 group-hover:scale-105`}
                     />
@@ -322,6 +341,7 @@ const StickyScrollGallery = forwardRef<HTMLElement, StickyScrollGalleryProps>(
                       src={src}
                       alt={`Aperçu projet ${i + 1}`}
                       loading="lazy"
+                      decoding="async"
                       className={`${shape.height} w-full object-cover align-bottom transition-all duration-700 group-hover:scale-105`}
                     />
                   </figure>
@@ -344,6 +364,7 @@ const StickyScrollGallery = forwardRef<HTMLElement, StickyScrollGalleryProps>(
                       src={src}
                       alt={src === VINTAGE_SRC ? 'Vintage vous régale' : `Aperçu projet phare ${i + 1}`}
                       loading="lazy"
+                      decoding="async"
                       style={{ objectPosition: src === VINTAGE_SRC ? vintageObjectPosition : invertedObjectPosition }}
                       className="h-full w-full object-cover align-bottom transition-transform duration-700 group-hover:scale-105"
                     />
@@ -366,6 +387,7 @@ const StickyScrollGallery = forwardRef<HTMLElement, StickyScrollGalleryProps>(
                       src={src}
                       alt="Green (6)"
                       loading="lazy"
+                      decoding="async"
                       style={{ objectPosition: greenObjectPosition }}
                       className={`${shape.height} w-full object-cover align-bottom transition-transform duration-700 group-hover:scale-105`}
                     />
@@ -379,6 +401,7 @@ const StickyScrollGallery = forwardRef<HTMLElement, StickyScrollGalleryProps>(
                       src={src}
                       alt={`Aperçu projet ${i + 6}`}
                       loading="lazy"
+                      decoding="async"
                       className={`${shape.height} w-full object-cover align-bottom transition-all duration-700 group-hover:scale-105`}
                     />
                   </figure>
