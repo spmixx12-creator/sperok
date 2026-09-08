@@ -9,6 +9,7 @@
 // au projet suivant. Montage vidéo : aperçu = vidéo, un projet par écran
 // (scroll-snap). Générique, réutilisable.
 import {
+  useEffect,
   useLayoutEffect,
   useRef,
   useState,
@@ -233,21 +234,57 @@ const SnapScene: FC<{ project: ShowProject; total: string; onBack: () => void }>
   project,
   total,
   onBack,
-}) => (
-  <section className="flex h-screen w-full snap-start flex-col overflow-hidden md:flex-row">
-    <Info project={project} total={total} onBack={onBack} />
-    <PreviewShell>
-      <video
-        src={project.media}
-        autoPlay
-        muted
-        loop
-        playsInline
-        className="h-full w-full object-cover"
-      />
-    </PreviewShell>
-  </section>
-);
+}) => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [inView, setInView] = useState(false);
+  // Une fois chargée, on garde la vidéo en mémoire (pas de re-téléchargement en
+  // revenant dessus).
+  const [loaded, setLoaded] = useState(false);
+
+  // On ne charge/joue QUE la vidéo à l'écran : les scènes hors-champ ne
+  // téléchargent rien → la vidéo visible démarre vite (pas de concurrence).
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        setInView(entry.isIntersecting);
+        if (entry.isIntersecting) setLoaded(true);
+      },
+      { rootMargin: '300px 0px', threshold: 0.25 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    if (inView) v.play().catch(() => {});
+    else v.pause();
+  }, [inView, loaded]);
+
+  return (
+    <section
+      ref={sectionRef}
+      className="flex h-screen w-full snap-start flex-col overflow-hidden md:flex-row"
+    >
+      <Info project={project} total={total} onBack={onBack} />
+      <PreviewShell>
+        <video
+          ref={videoRef}
+          src={loaded ? project.media : undefined}
+          muted
+          loop
+          playsInline
+          preload={inView ? 'auto' : 'none'}
+          className="h-full w-full bg-neutral-900 object-cover"
+        />
+      </PreviewShell>
+    </section>
+  );
+};
 
 /* ------------------------------------------------------------------ */
 
