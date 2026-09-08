@@ -131,9 +131,20 @@ export default function ContactPage({ onBack }: ContactPageProps) {
       <div className="relative z-[2] flex h-full flex-col px-5 py-4 sm:px-10 sm:py-8 lg:h-auto lg:min-h-screen lg:px-16">
         {/* Navigation */}
         <nav className="flex items-center justify-between">
-          <span
-            className="block h-7 w-24 select-none md:h-8 md:w-28"
-            aria-label="spérok"
+          {/* Logo « spérok » → retour à l'accueil (sans rejouer l'intro). */}
+          <button
+            type="button"
+            onClick={() => {
+              try {
+                sessionStorage.setItem('sperok_entered', '1');
+              } catch {
+                /* noop */
+              }
+              window.location.hash = '';
+              requestAnimationFrame(() => window.scrollTo({ top: 0 }));
+            }}
+            aria-label="spérok — retour à l'accueil"
+            className="block h-7 w-24 cursor-pointer select-none md:h-8 md:w-28"
             style={{
               backgroundColor: '#FAF7F2',
               WebkitMaskImage: `url(${logoMask})`,
