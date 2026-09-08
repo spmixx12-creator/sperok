@@ -10,7 +10,7 @@
 //     pour les titres/boutons, font-mono pour les labels, voile sombre pour
 //     garder tous les éléments bien visibles.
 // Le formulaire ouvre WhatsApp pré-rempli. Téléchargement du CV.
-import { useLayoutEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { ArrowLeft, Mail, MessageCircle, Phone, Download, Send, MousePointerClick, ChevronDown } from 'lucide-react';
 import { CV_DOWNLOAD_NAME, CV_FILE } from '../assets/cv';
 import logoMask from '../créa/sperok-mask.png';
@@ -56,6 +56,13 @@ export default function ContactPage({ onBack }: ContactPageProps) {
   const [activeVideo, setActiveVideo] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [hasSwitched, setHasSwitched] = useState(false); // masque l'indice après le 1er clic
+  // Une fois le 1er fond lancé, on précharge les autres en arrière-plan pour que
+  // le changement de fond soit quasi instantané.
+  const [warmOthers, setWarmOthers] = useState(false);
+  useEffect(() => {
+    const t = window.setTimeout(() => setWarmOthers(true), 1800);
+    return () => window.clearTimeout(t);
+  }, []);
 
   const [nom, setNom] = useState('');
   const [email, setEmail] = useState('');
@@ -102,6 +109,7 @@ export default function ContactPage({ onBack }: ContactPageProps) {
           key={v.src}
           src={v.src}
           active={i === activeVideo}
+          warm={warmOthers}
           fade={1}
           className={`absolute inset-0 h-full w-full transition-opacity duration-1000 ease-in-out ${
             i === activeVideo ? 'opacity-100' : 'opacity-0'

@@ -15,9 +15,12 @@ interface LoopingVideoProps {
   className?: string;
   /** Durée du fondu de jointure, en secondes. */
   fade?: number;
+  /** Précharge la vidéo en arrière-plan même inactive (pour un changement de
+   *  fond quasi instantané une fois la vidéo active déjà lancée). */
+  warm?: boolean;
 }
 
-export default function LoopingVideo({ src, active, className = '', fade = 1 }: LoopingVideoProps) {
+export default function LoopingVideo({ src, active, className = '', fade = 1, warm = false }: LoopingVideoProps) {
   const aRef = useRef<HTMLVideoElement>(null);
   const bRef = useRef<HTMLVideoElement>(null);
   const [front, setFront] = useState<'a' | 'b'>('a'); // copie visible
@@ -64,7 +67,7 @@ export default function LoopingVideo({ src, active, className = '', fade = 1 }: 
         src={src}
         muted
         playsInline
-        preload={active ? 'auto' : 'none'}
+        preload={active || warm ? 'auto' : 'none'}
         onTimeUpdate={() => handleTime('a')}
         className={`${base} ${front === 'a' ? 'opacity-100' : 'opacity-0'}`}
         style={dur}
