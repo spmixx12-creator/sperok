@@ -2,9 +2,8 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Home, LayoutGrid, ArrowLeft, Monitor, Palette, Share2, Clapperboard, Printer, Film, ChevronRight, X, User, Mail, MousePointerClick, type LucideIcon } from 'lucide-react';
 import { ContainerScroll } from './ui/container-scroll-animation';
-import { Dock, DockItem, DockIcon, DockLabel } from './ui/dock';
 import { InfiniteMasonry } from './ui/infinite-masonry';
-import { Button } from './ui/new-button';
+import { InteractiveHoverLinks } from './ui/interactive-hover-links';
 import { BellNotify } from './ui/bell-notify';
 import { Component as Footer } from './ui/footer-taped-design';
 import { MarqueeAnimation } from './ui/marquee-effect';
@@ -376,14 +375,14 @@ export default function ProjectsPage({ onBack }: ProjectsPageProps) {
       </div>
 
       {/* ============================================================= */}
-      {/* HUB CATÉGORIES : page noire (SANS grain), fenêtre de navigation */}
-      {/* (dock façon macOS) centrée. Chaque icône = une catégorie        */}
-      {/* d'intervention ; le clic amène à la catégorie correspondante.    */}
+      {/* HUB CATÉGORIES : page noire (SANS grain). Liste de liens          */}
+      {/* interactifs (titre + image au survol + flèche) : chaque ligne =   */}
+      {/* une catégorie d'intervention ; le clic ouvre la catégorie.        */}
       {/* z-[10000] > noise-overlay (z-9999) → aucun grain sur cette page. */}
       {/* ============================================================= */}
       <section
         id="hub"
-        className="relative z-[10000] flex h-screen w-full flex-col items-center justify-center overflow-hidden bg-black px-6 pt-44 text-center md:pt-0"
+        className="relative z-[10000] flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-black px-6 pt-44 pb-16 text-center md:pt-36"
       >
         {/* Cloche « À propos de moi » suspendue au dock : sa PROPRE corde relie
             le dock à la lanterne, DERRIÈRE le texte (z-[-1]) — le paragraphe la
@@ -452,56 +451,65 @@ export default function ProjectsPage({ onBack }: ProjectsPageProps) {
           </span>
         </h2>
 
-        <Dock className="dock-cta border border-white/10 bg-white/5 backdrop-blur-md">
-          {DOCK.map((item) => {
-            const Icon = item.icon;
-            return (
-              <DockItem
-                key={item.label}
-                onClick={() => setActiveCategory(item.label)}
-                className="group aspect-square cursor-pointer rounded-full border border-white/10 bg-white/10 transition-colors hover:bg-amber-400"
-              >
-                <DockLabel className="border border-white/10 bg-neutral-800 text-white">
-                  {item.label}
-                </DockLabel>
-                <DockIcon>
-                  <Icon className="h-full w-full text-amber-400 transition-colors group-hover:text-neutral-900" />
-                </DockIcon>
-              </DockItem>
-            );
-          })}
-        </Dock>
-
-        {/* Indice de cliquabilité : beaucoup ne devinaient pas que les icônes
-            sont cliquables (mobile + desktop) → micro-instruction animée. */}
-        <div className="mt-4 flex items-center justify-center gap-2 font-mono text-[9px] uppercase tracking-widest text-amber-400/90 md:text-[10px]">
+        {/* Indice de cliquabilité (mobile + desktop). */}
+        <div className="mb-4 flex items-center justify-center gap-2 font-mono text-[9px] uppercase tracking-widest text-amber-400/90 md:mb-6 md:text-[10px]">
           <MousePointerClick className="h-3.5 w-3.5 shrink-0 animate-bounce" />
-          <span>Touchez une icône pour explorer un domaine</span>
+          <span>Cliquez sur un domaine pour l'explorer</span>
         </div>
 
-        {/* Web design & Montage vidéo mis en avant, sur le même écran, juste
-            sous le dock (boutons animés → ouvrent la visionneuse). */}
-        <p className="mt-8 max-w-2xl text-center font-display text-sm font-medium leading-relaxed text-white/90 md:mt-12 md:text-lg">
-          En dehors de tout ça, je me débrouille aussi en{' '}
-          <Button
-            variant="default"
-            icon={<Monitor />}
-            onClick={() => { window.location.hash = '#/web-design'; }}
-            className="align-middle"
-          >
-            Web design
-          </Button>
-          . Pour moi, en tant que créatif, je ne peux pas négliger le{' '}
-          <Button
-            variant="default"
-            icon={<Film />}
-            onClick={() => { window.location.hash = '#/montage-video'; }}
-            className="align-middle"
-          >
-            Montage vidéo
-          </Button>
-          .
-        </p>
+        {/* Liste des domaines : image de la catégorie au survol, clic → ouvre
+            la visionneuse (ou la page dédiée pour Web design / Montage vidéo). */}
+        <InteractiveHoverLinks
+          className="relative z-10 max-w-4xl"
+          links={[
+            {
+              heading: 'Tout',
+              subheading: 'Toutes mes réalisations, tous domaines confondus',
+              imgSrc: CATEGORY_IMAGES['Tout']?.[0],
+              onClick: () => setActiveCategory('Tout'),
+            },
+            {
+              heading: 'Branding',
+              subheading: 'Identités visuelles, logos et chartes graphiques',
+              imgSrc: CATEGORY_IMAGES['Branding']?.[0],
+              onClick: () => setActiveCategory('Branding'),
+            },
+            {
+              heading: 'Social media',
+              subheading: 'Visuels et contenus pour les réseaux sociaux',
+              imgSrc: CATEGORY_IMAGES['Social media']?.[0],
+              onClick: () => setActiveCategory('Social media'),
+            },
+            {
+              heading: 'Motion design',
+              subheading: 'Animations et visuels en mouvement',
+              imgSrc: CATEGORY_IMAGES['Motion design']?.[0],
+              onClick: () => setActiveCategory('Motion design'),
+            },
+            {
+              heading: 'Print design',
+              subheading: 'Affiches, flyers et supports imprimés',
+              imgSrc: CATEGORY_IMAGES['Print design']?.[0],
+              onClick: () => setActiveCategory('Print design'),
+            },
+            {
+              heading: 'Web design',
+              subheading: 'Sites et interfaces web',
+              imgSrc: CATEGORY_IMAGES['Web design']?.[0],
+              onClick: () => {
+                window.location.hash = '#/web-design';
+              },
+            },
+            {
+              heading: 'Montage vidéo',
+              subheading: 'Montages et réalisations vidéo',
+              imgSrc: CATEGORY_IMAGES['Montage vidéo']?.[0] ?? CATEGORY_IMAGES['Motion design']?.[0],
+              onClick: () => {
+                window.location.hash = '#/montage-video';
+              },
+            },
+          ]}
+        />
       </section>
 
       {/* Footer identique à celui de l'accueil (au-dessus du grain, z-[10000]). */}
