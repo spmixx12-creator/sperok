@@ -383,13 +383,13 @@ export default function ProjectsPage({ onBack }: ProjectsPageProps) {
       {/* ============================================================= */}
       <section
         id="hub"
-        className="relative z-[10000] flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-black px-6 pt-64 pb-16 text-center md:pt-60"
+        className="relative z-[10000] flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-black px-6 pt-64 pb-44 text-center md:pt-60 md:pb-52"
       >
         {/* Cloche « À propos de moi » suspendue au dock : sa PROPRE corde relie
             le dock à la lanterne, DERRIÈRE le texte (z-[-1]) — le paragraphe la
             recouvre. Le bouton apparaît en bas, sous le paragraphe. Taille
             inchangée. */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 top-[62%] z-[-1] flex justify-center">
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 top-[68%] z-[-1] flex justify-center">
           <div className="pointer-events-auto h-full w-full max-w-md">
             <BellNotify
               size={300}
@@ -493,7 +493,7 @@ export default function ProjectsPage({ onBack }: ProjectsPageProps) {
 
         {/* Web design & Montage vidéo mis en avant, juste sous la liste
             (boutons animés → ouvrent la page dédiée). */}
-        <p className="relative z-10 mt-10 max-w-2xl text-center font-display text-sm font-medium leading-relaxed text-white/90 md:mt-14 md:text-lg">
+        <p className="relative z-10 mt-5 max-w-2xl text-center font-display text-sm font-medium leading-relaxed text-white/90 md:mt-8 md:text-lg">
           En dehors de tout ça, je me débrouille aussi en{' '}
           <Button
             variant="default"
