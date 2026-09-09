@@ -31,7 +31,7 @@ const DOCK = [
   { label: 'Tout', icon: LayoutGrid },
   { label: 'Branding', icon: Palette },
   { label: 'Social media', icon: Share2 },
-  { label: 'Motion design', icon: Clapperboard },
+  { label: 'Mockup & Motion', icon: Clapperboard },
   { label: 'Print design', icon: Printer },
 ] as const;
 
@@ -60,7 +60,7 @@ const CATEGORY_IMAGES: Record<string, string[]> = {
   'Web design': rootImages,
   Branding: folderImages('Branding'),
   'Social media': folderImages('Social Media'),
-  'Motion design': folderImages('Motion Design'),
+  'Mockup & Motion': [...folderImages('Mockup'), ...folderImages('Motion Design')],
   'Print design': folderImages('Print Design'),
   'Montage vidéo': folderImages('Montage Vidéo'),
 };
@@ -70,6 +70,7 @@ const CATEGORY_IMAGES: Record<string, string[]> = {
 CATEGORY_IMAGES['Tout'] = [
   ...folderImages('Branding'),
   ...folderImages('Social Media'),
+  ...folderImages('Mockup'),
   ...folderImages('Motion Design'),
   ...folderImages('Print Design'),
 ];
@@ -158,7 +159,7 @@ export default function ProjectsPage({ onBack }: ProjectsPageProps) {
     Tout: LayoutGrid,
     Branding: Palette,
     'Social media': Share2,
-    'Motion design': Clapperboard,
+    'Mockup & Motion': Clapperboard,
     'Print design': Printer,
     'Web design': Monitor,
     'Montage vidéo': Film,
@@ -486,9 +487,9 @@ export default function ProjectsPage({ onBack }: ProjectsPageProps) {
               onClick: () => setActiveCategory('Social media'),
             },
             {
-              label: 'Motion design',
+              label: 'Mockup & Motion',
               imgSrc: gifMotion,
-              onClick: () => setActiveCategory('Motion design'),
+              onClick: () => setActiveCategory('Mockup & Motion'),
             },
             {
               label: 'Print design',
