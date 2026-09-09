@@ -14,7 +14,7 @@ import logoMask from '../créa/sperok-mask.png';
 import apercuVideo from '../créa/apercu-travaux-web.opt.mp4';
 // Aperçus animés des fenêtres « Mes domaines » (GIF convertis en WebP animé,
 // bien plus légers).
-import gifTout from '../Gif/Hypnotique.webp';
+import gifTout from '../Gif/EN FORME! on Behance.webp';
 import gifBranding from '../Gif/Meet the Writer_ Vik Bogdanov, Tech Storyteller.webp';
 import gifSocial from '../Gif/Moscow Subway - Stylized (UE4).webp';
 import gifMotion from '../Gif/Trending GIF love animation boy flower.webp';
