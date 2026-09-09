@@ -12,6 +12,13 @@ import FloatingActionMenu from './ui/floating-action-menu';
 import Lenis from 'lenis';
 import logoMask from '../créa/sperok-mask.png';
 import apercuVideo from '../créa/apercu-travaux-web.opt.mp4';
+// Aperçus animés des fenêtres « Mes domaines » (GIF convertis en WebP animé,
+// bien plus légers).
+import gifTout from '../Gif/Hypnotique.webp';
+import gifBranding from '../Gif/Meet the Writer_ Vik Bogdanov, Tech Storyteller.webp';
+import gifSocial from '../Gif/Moscow Subway - Stylized (UE4).webp';
+import gifMotion from '../Gif/Trending GIF love animation boy flower.webp';
+import gifPrint from '../Gif/ArtStation - Creation of a Star.webp';
 
 interface ProjectsPageProps {
   onBack: () => void;
@@ -465,27 +472,27 @@ export default function ProjectsPage({ onBack }: ProjectsPageProps) {
           items={[
             {
               label: 'Tout',
-              imgSrc: CATEGORY_IMAGES['Tout']?.[0],
+              imgSrc: gifTout,
               onClick: () => setActiveCategory('Tout'),
             },
             {
               label: 'Branding',
-              imgSrc: CATEGORY_IMAGES['Branding']?.[0],
+              imgSrc: gifBranding,
               onClick: () => setActiveCategory('Branding'),
             },
             {
               label: 'Social media',
-              imgSrc: CATEGORY_IMAGES['Social media']?.[0],
+              imgSrc: gifSocial,
               onClick: () => setActiveCategory('Social media'),
             },
             {
               label: 'Motion design',
-              imgSrc: CATEGORY_IMAGES['Motion design']?.[0],
+              imgSrc: gifMotion,
               onClick: () => setActiveCategory('Motion design'),
             },
             {
               label: 'Print design',
-              imgSrc: CATEGORY_IMAGES['Print design']?.[0],
+              imgSrc: gifPrint,
               onClick: () => setActiveCategory('Print design'),
             },
           ]}
