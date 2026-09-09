@@ -154,7 +154,8 @@ export default function ContactPage({ onBack }: ContactPageProps) {
             aria-label="spérok — retour à l'accueil"
             className="block h-7 w-24 cursor-pointer select-none md:h-8 md:w-28"
             style={{
-              backgroundColor: '#FAF7F2',
+              backgroundColor: '#ffffff',
+              mixBlendMode: 'difference',
               WebkitMaskImage: `url(${logoMask})`,
               maskImage: `url(${logoMask})`,
               WebkitMaskRepeat: 'no-repeat',
