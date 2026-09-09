@@ -4,6 +4,7 @@ import { Home, LayoutGrid, ArrowLeft, Monitor, Palette, Share2, Clapperboard, Pr
 import { ContainerScroll } from './ui/container-scroll-animation';
 import { InfiniteMasonry } from './ui/infinite-masonry';
 import { InteractiveHoverLinks } from './ui/interactive-hover-links';
+import { Button } from './ui/new-button';
 import { BellNotify } from './ui/bell-notify';
 import { Component as Footer } from './ui/footer-taped-design';
 import { MarqueeAnimation } from './ui/marquee-effect';
@@ -382,7 +383,7 @@ export default function ProjectsPage({ onBack }: ProjectsPageProps) {
       {/* ============================================================= */}
       <section
         id="hub"
-        className="relative z-[10000] flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-black px-6 pt-44 pb-16 text-center md:pt-36"
+        className="relative z-[10000] flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-black px-6 pt-56 pb-16 text-center md:pt-48"
       >
         {/* Cloche « À propos de moi » suspendue au dock : sa PROPRE corde relie
             le dock à la lanterne, DERRIÈRE le texte (z-[-1]) — le paragraphe la
@@ -492,24 +493,32 @@ export default function ProjectsPage({ onBack }: ProjectsPageProps) {
               imgSrc: CATEGORY_IMAGES['Print design']?.[0],
               onClick: () => setActiveCategory('Print design'),
             },
-            {
-              heading: 'Web design',
-              subheading: 'Sites et interfaces web',
-              imgSrc: CATEGORY_IMAGES['Web design']?.[0],
-              onClick: () => {
-                window.location.hash = '#/web-design';
-              },
-            },
-            {
-              heading: 'Montage vidéo',
-              subheading: 'Montages et réalisations vidéo',
-              imgSrc: CATEGORY_IMAGES['Montage vidéo']?.[0] ?? CATEGORY_IMAGES['Motion design']?.[0],
-              onClick: () => {
-                window.location.hash = '#/montage-video';
-              },
-            },
           ]}
         />
+
+        {/* Web design & Montage vidéo mis en avant, juste sous la liste
+            (boutons animés → ouvrent la page dédiée). */}
+        <p className="relative z-10 mt-10 max-w-2xl text-center font-display text-sm font-medium leading-relaxed text-white/90 md:mt-14 md:text-lg">
+          En dehors de tout ça, je me débrouille aussi en{' '}
+          <Button
+            variant="default"
+            icon={<Monitor />}
+            onClick={() => { window.location.hash = '#/web-design'; }}
+            className="align-middle"
+          >
+            Web design
+          </Button>
+          . Pour moi, en tant que créatif, je ne peux pas négliger le{' '}
+          <Button
+            variant="default"
+            icon={<Film />}
+            onClick={() => { window.location.hash = '#/montage-video'; }}
+            className="align-middle"
+          >
+            Montage vidéo
+          </Button>
+          .
+        </p>
       </section>
 
       {/* Footer identique à celui de l'accueil (au-dessus du grain, z-[10000]). */}
