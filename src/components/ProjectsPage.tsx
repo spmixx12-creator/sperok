@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Home, LayoutGrid, ArrowLeft, Monitor, Palette, Share2, Clapperboard, Printer, Film, ChevronRight, X, User, Mail, MousePointerClick, type LucideIcon } from 'lucide-react';
 import { ContainerScroll } from './ui/container-scroll-animation';
 import { InfiniteMasonry } from './ui/infinite-masonry';
-import { InteractiveHoverLinks } from './ui/interactive-hover-links';
+import { CategoryGalleryStrip } from './ui/category-gallery-strip';
 import { Button } from './ui/new-button';
 import { BellNotify } from './ui/bell-notify';
 import { Component as Footer } from './ui/footer-taped-design';
@@ -383,7 +383,7 @@ export default function ProjectsPage({ onBack }: ProjectsPageProps) {
       {/* ============================================================= */}
       <section
         id="hub"
-        className="relative z-[10000] flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-black px-6 pt-56 pb-16 text-center md:pt-48"
+        className="relative z-[10000] flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-black px-6 pt-64 pb-16 text-center md:pt-60"
       >
         {/* Cloche « À propos de moi » suspendue au dock : sa PROPRE corde relie
             le dock à la lanterne, DERRIÈRE le texte (z-[-1]) — le paragraphe la
@@ -455,41 +455,36 @@ export default function ProjectsPage({ onBack }: ProjectsPageProps) {
         {/* Indice de cliquabilité (mobile + desktop). */}
         <div className="mb-4 flex items-center justify-center gap-2 font-mono text-[9px] uppercase tracking-widest text-amber-400/90 md:mb-6 md:text-[10px]">
           <MousePointerClick className="h-3.5 w-3.5 shrink-0 animate-bounce" />
-          <span>Cliquez sur un domaine pour l'explorer</span>
+          <span>Survolez ou touchez une fenêtre pour explorer un domaine</span>
         </div>
 
-        {/* Liste des domaines : image de la catégorie au survol, clic → ouvre
-            la visionneuse (ou la page dédiée pour Web design / Montage vidéo). */}
-        <InteractiveHoverLinks
-          className="relative z-10 max-w-4xl"
-          links={[
+        {/* Fenêtres des domaines : image de couverture + nom vertical, la fenêtre
+            survolée s'élargit ; clic → ouvre la visionneuse de la catégorie. */}
+        <CategoryGalleryStrip
+          className="relative z-10 max-w-5xl"
+          items={[
             {
-              heading: 'Tout',
-              subheading: 'Toutes mes réalisations, tous domaines confondus',
+              label: 'Tout',
               imgSrc: CATEGORY_IMAGES['Tout']?.[0],
               onClick: () => setActiveCategory('Tout'),
             },
             {
-              heading: 'Branding',
-              subheading: 'Identités visuelles, logos et chartes graphiques',
+              label: 'Branding',
               imgSrc: CATEGORY_IMAGES['Branding']?.[0],
               onClick: () => setActiveCategory('Branding'),
             },
             {
-              heading: 'Social media',
-              subheading: 'Visuels et contenus pour les réseaux sociaux',
+              label: 'Social media',
               imgSrc: CATEGORY_IMAGES['Social media']?.[0],
               onClick: () => setActiveCategory('Social media'),
             },
             {
-              heading: 'Motion design',
-              subheading: 'Animations et visuels en mouvement',
+              label: 'Motion design',
               imgSrc: CATEGORY_IMAGES['Motion design']?.[0],
               onClick: () => setActiveCategory('Motion design'),
             },
             {
-              heading: 'Print design',
-              subheading: 'Affiches, flyers et supports imprimés',
+              label: 'Print design',
               imgSrc: CATEGORY_IMAGES['Print design']?.[0],
               onClick: () => setActiveCategory('Print design'),
             },
